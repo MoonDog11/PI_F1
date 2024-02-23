@@ -1,0 +1,153 @@
+/* Landing.css */
+
+.landing-container {
+    background-color: black;
+    background-image: url('./E6WK2jRXEAQWyzX.jpeg');
+    background-size: 100% 100%;
+    /* Ajusta el tamaño de la imagen de fondo */
+    background-position: center center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+    /* Ajusta el ancho del contenedor al 100% del viewport */
+    position: relative;
+    overflow: hidden;
+    /* Asegura que no haya desbordamiento del fondo */
+}
+
+.form-logo {
+    width: 80%;
+    max-width: 350px;
+    height: auto;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.image-container {
+    width: 80%;
+    max-width: 1200px;
+    position: relative;
+}
+
+.landing-image {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: -1;
+}
+
+.login-form-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(rgba(0, 0, 0, 0.7), transparent);
+    /* Fondo degradado de negro a transparente */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: #333;
+    /* Color de texto gris oscuro */
+}
+
+/* Estilos para el formulario */
+.login-form-overlay {
+    position: absolute;
+    top: 27%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(rgba(0, 0, 0, 0.9), transparent);
+    /* Fondo degradado de negro a transparente */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: #4f4e4e;
+    /* Color de texto gris oscuro */
+   
+    /* Agregado: Text-shadow con glow rosado */
+}
+
+/* Estilos para el formulario */
+.login-form-overlay form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-form-overlay input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #3f3d3d;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.login-form-overlay button {
+    background-color: #6a6b6d;
+    color: rgb(22, 22, 22);
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Tipografía personalizada desde tu PC */
+@font-face {
+    font-family: 'Dune_Rise';
+    src: local('NombreDeTuFuente'), url('./Dune_Rise.ttf') format('woff');
+}
+
+.login-form-overlay {
+    z-index:  999;
+    font-family: 'Dune_Rise', sans-serif;
+    /* Usa tu fuente personalizada */
+    line-height: 1.5;
+    /* Ajusta el interlineado según tus preferencias */
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sign-in-button,
+.register-button {
+    background-color: #6a6b6d;
+    color: rgb(22, 22, 22);
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.sign-in-button:hover,
+.register-button:hover {
+    background-color: #ff69b4;
+    /* Cambia al color rosado cuando se hace hover */
+}
+.custom-button {
+    background: linear-gradient(rgba(3, 2, 2, 0.8), transparent);
+    /* Fondo degradado de negro a transparente */
+    color: #ff69b4;
+    /* Color de texto rosado */
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.custom-button:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), transparent);
+    /* Cambia el fondo al hacer hover */
+    color: #ff69b4;
+    /* Cambia el color de texto a rosado al hacer hover */
+}

@@ -1,0 +1,5 @@
+body[data-route="/home"] {
+  background-image: linear-gradient(to bottom, #dddddd, #000000);
+  /* Degradado lineal que va de gris claro (#dddddd) a negro (#000000) */
+  /* También puedes ajustar los colores según tus preferencias */
+}

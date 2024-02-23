@@ -1,0 +1,166 @@
+/* Estilo para la tarjeta */
+.card {
+    position: relative;
+    border: 1px solid #313030;
+    padding: 15px;
+    margin: 10px;
+    width: 300px;
+    height: 600px;
+    /* Ajusta la altura según tus necesidades */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    background-image: url('./frente tarjeta.png');
+    background-size: 100% 100%;
+        /* Ajusta para que la imagen cubra completamente la tarjeta */
+    background-position: center;
+        /* Ajusta según tus necesidades */
+    
+        /* Ruta de tu imagen de fondo */
+    /* Agrega la propiedad box-shadow a la transición */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+        /* Añadido para ocultar el contenido que se desborda */
+}
+    
+
+/* Estilo para la tarjeta al hacer hover */
+/* Estilo para la tarjeta al hacer hover */
+.card:hover .back-content {
+    transform: translateY(0);
+    /* Añadido para mostrar la parte posterior sin rotación */
+    opacity: 1;
+    /* Añadido para hacer visible la parte posterior */
+}
+
+/* Estilo para la parte frontal de la tarjeta */
+.front-content {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+
+}
+
+.name{
+      font-family: 'Porsche', sans-serif;
+        /* Reemplaza 'TuFuente' con el nombre de tu fuente */
+        font-size: 25px;
+        /* Ajusta el tamaño de la fuente según sea necesario */
+        font-weight: bold;
+        /* Puedes ajustar el peso de la fuente según sea necesario */
+        color: #333;
+        /* Cambia el color del texto según tus preferencias */
+
+}
+@font-face {
+    font-family: 'Tesla';
+    src: local('NombreDeTuFuente'), url('./TESLA.ttf') format('woff');
+}
+@font-face {
+    font-family: 'Porsche';
+    src: local('NombreDeTuFuente'), url('./911porschav3.ttf') format('woff');
+}
+@font-face {
+    font-family: 'Mandalore';
+    src: local('NombreDeTuFuente'), url('./mandalore.ttf') format('woff');
+}
+
+@font-face {
+    font-family: 'Blade';
+    src: local('NombreDeTuFuente'), url('./BLADRMF_.TTF') format('woff');
+}
+
+/* Estilo para la imagen frontal */
+.front-content img {
+    width: 250px;
+    /* Establece el ancho de la imagen según sea necesario */
+    height: 250px;
+    /* Establece la altura de la imagen según sea necesario */
+    border-radius: 50%;
+    /* Aplica un borde redondeado al 50% para crear un círculo */
+    object-fit: cover;
+    border: 4px solid #333;
+}
+
+/* Estilo para los párrafos en la parte frontal */
+.front-content p {
+    text-align: center;
+    margin: 5px 0;
+}
+
+/* Estilo para la parte posterior de la tarjeta */
+.back-content {
+    background-image: url('./depositphotos_37947033-stock-photo-dark-grunge-texture-background-black.jpeg');
+    background-size: 100% 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-size:  12px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: rotateY(180deg);
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.back-text {
+    margin: 5px 0;
+    font-size: 12px;
+    /* Ajusta el tamaño del texto según tus preferencias */
+    color: #444343;
+    /* Cambia el color del texto según tus preferencias */
+    text-align: justify;
+        /* Añadido para justificar el texto */
+}
+
+.teams {
+    text-align: center;
+        /* Alinea el texto al centro */
+    font-weight: bold;
+    color: #5d5f5d;
+    font-family: 'Porsche', sans-serif;
+    /* Cambia el color según tus preferencias */
+    /* Agrega otros estilos según sea necesario */
+}
+
+.back-content p {
+    margin: 5px 0;
+    font-size: 24px;
+    color: #a4a1a1;
+    text-align: justify;
+    font-family: 'Mandalore', sans-serif;
+}
+/* Estilo para el botón Show More/Show Less */
+/* Estilo para el botón Show More/Show Less */
+.description-container button {
+    font-family: 'Blade', sans-serif;
+    background: linear-gradient(rgba(0, 0, 0, 1), transparent);
+    color: #928f8f;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    /* Se elimina el box-shadow y text-shadow del estado normal */
+}
+
+/* Estilo para el botón al hacer hover */
+.description-container button:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), transparent);
+    color: #f212e3;
+    /* Añadido para establecer el color del texto al hacer hover */
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    /* Añadido text-shadow al hacer hover */
+}

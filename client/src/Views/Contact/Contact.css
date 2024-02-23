@@ -1,0 +1,45 @@
+
+
+/* Estilos para el contenedor de información de contacto */
+.contact-container { 
+    background-image: url('./2022-F1-Car-4-copy-1024x683.jpeg');
+    /* Color de fondo del contenedor */
+    padding: 20px;
+    /* Espaciado interno */
+    text-align: center;
+    /* Alinea el texto al centro */
+    display: flex;
+    /* Usa el modelo de caja flexible */
+    flex-direction: column;
+    /* Apila los elementos verticalmente */
+    align-items: center;
+    /* Alinea los elementos horizontalmente */
+    justify-content: center;
+    /* Alinea los elementos verticalmente */
+    height: 100vh;
+    /* Establece la altura del contenedor al 100% del viewport */
+}
+
+.contact-info-container {
+    font-family: 'Dune';
+    color: #fff;
+    /* Estilos para el contenedor de información de contacto */
+background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    /* Cambia 'ruta/a/la/imagen.jpg' por la ruta de tu imagen */
+    background-size: cover;
+    /* Ajusta el tamaño de la imagen para cubrir todo el contenedor */
+    background-position: center;
+    /* Centra la imagen dentro del contenedor */
+    padding: 20px;
+    /* Ajusta el relleno según sea necesario */
+    border-radius: 10px;
+    /* Agrega bordes redondeados si lo deseas */
+    /* Baja la opacidad de la imagen de fondo */
+    background-color: rgba(0, 0, 0, 0.10);
+    /* Ajusta el cuarto valor (0.5) para cambiar la opacidad */
+}
+
+@font-face {
+    font-family: 'Dune';
+    src: local('NombreDeTuFuente'), url('./Dune_Rise.ttf') format('woff');
+}

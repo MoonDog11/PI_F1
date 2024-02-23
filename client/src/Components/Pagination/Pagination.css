@@ -1,0 +1,36 @@
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    /* Ajusta el margen superior según sea necesario */
+}
+
+.pagination-button {
+    font-family: 'blade';
+    overflow: hidden;
+    padding: 10px;
+    /* Ajusta el padding según sea necesario */
+    border: 1px solid #4f4d4d;
+    border-radius: 8px;
+    background: linear-gradient(to top, #3f3e3e, #000);
+    /* Fondo degradado de gris a negro */
+    color: #fff;
+    /* Color del texto */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.pagination-button:hover {
+    background: linear-gradient(to top, #3f3e3e, #000);
+    /* Mantener el fondo degradado */
+    color: #fff;
+    /* Cambiar el color del texto */
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #f8f2f8, 0 0 40px #ede8ee, 0 0 50px #f0eaf0, 0 0 60px #f7f3f8, 0 0 70px #faf7fa;
+    /* Efecto de resplandor */
+}
+
+.pagination-button.active {
+    background-color: #555;
+    /* Opcional: un tono más claro para el botón activo */
+}

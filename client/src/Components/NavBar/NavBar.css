@@ -1,0 +1,68 @@
+.navbar {
+    padding: 10px;
+    font-family: 'blade', sans-serif;
+    font-size: 30px;
+    color: #808080;
+   
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    margin: 0;
+    /* Elimina el margen predeterminado */
+    padding: 0;
+    /* Elimina el relleno predeterminado */
+}
+
+li {
+    margin: 0 200px;
+    /* Reduzco el margen para dispositivos móviles */
+}
+
+a {
+    text-decoration: none;
+    color: #808080;
+    font-weight: bold;
+    position: relative;
+    transition: color 0.3s;
+}
+
+
+
+@font-face {
+    font-family: 'blade';
+    src: local('NombreDeTuFuente'), url('./BLADRMF_.TTF') format('woff');
+}
+
+.nav-container {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.nav-container a {
+    color: #808080;
+    transition: color 0.3s;
+}
+
+.nav-container a:hover {
+    color: #ff69b4;
+    text-shadow: 0 0 10px rgba(251, 6, 210, 0.8);
+}
+
+/* Media query para hacer la barra de navegación responsive */
+@media screen and (max-width: 768px) {
+    .navbar {
+        font-size: 20px;
+    }
+
+    ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    li {
+        margin: 10px 0;
+    }
+}

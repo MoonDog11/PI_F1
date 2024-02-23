@@ -1,0 +1,127 @@
+/* DriverForm.css */
+
+/* Estilos específicos para el formulario de conductor */
+.driver-form-container-2 {
+    background-image: url('./abstract-316425_640.jpeg');
+    max-width: 2000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+  
+    border-radius: 10px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.driver-form-container-2 form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.driver-form-container-2 label {
+    margin-bottom: 10px;
+}
+
+.INPUT-2 {
+    background: linear-gradient(to bottom, #000, #333);
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+    z-index: 2;
+}
+
+.driver-form-container-2 button {
+    overflow: hidden;
+    padding: 10px;
+    border: 1px solid #4f4d4d;
+    border-radius: 8px;
+    background: linear-gradient(to top, #3f3e3e, #000);
+    transition: all .2s ease-in-out;
+    position: relative;
+    margin-top: 10px;
+    /* Añadir margen superior para separarlo del campo de entrada */
+}
+
+.driver-form-container-2 button:before {
+    content: " ";
+    display: block;
+    width: 200px;
+    height: 80px;
+    background: rgba(255, 255, 255, .4);
+    position: absolute;
+    top: -10px;
+    left: -200px;
+    transform: rotate(-45deg);
+    transition: all .2s ease-in-out;
+}
+
+.driver-form-container-2 button:hover:before {
+    margin-left: 300%;
+}
+
+.driver-form-container-2 button:hover {
+    border: 1px solid rgba(255, 255, 255, 1);
+}
+
+@font-face {
+    font-family: 'blade';
+    src: local('NombreDeTuFuente'), url('./BLADRMF_.TTF') format('woff');
+}
+
+.driver-form-container-2 button .button-text {
+    font-family: 'blade', sans-serif;
+    color: #f80202;
+    font-size: 36px;
+    font-weight: bold;
+    text-shadow: 0 0 5px crimson;
+    transition: color 1s ease-in-out, text-shadow 1s ease-in-out;
+}
+
+.driver-form-container-2 button:hover .button-text {
+    color: yellow;
+    text-shadow: 0 0 10px lime;
+    animation: trafficLight 2s forwards;
+    background: transparent !important;
+}
+
+@keyframes trafficLight {
+
+    0%,
+    49.9% {
+        color: yellow;
+        text-shadow: 0 0 10px lime;
+    }
+
+    50%,
+    100% {
+        color: rgba(0, 255, 0, 0.7);
+        text-shadow: 0 0 10px lime;
+    }
+}
+
+.driver-finder-title {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #f6c3e0;
+}
+
+.INPUT-2 {
+    background: linear-gradient(to bottom, #000, #333);
+    padding: 8px;
+    margin-bottom: 10px;
+    width: 100%;
+    border: 1px solid #313030;
+    border-radius: 4px;
+}
+
+.search-bar-container {
+    display: flex;
+    flex-direction: column;
+    /* Cambiar la dirección de los elementos a columna */
+    align-items: center;
+    /* Centrar horizontalmente los elementos */
+}
