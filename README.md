@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ![HenryLogo](https://d31uz8lwfmyn8g.cloudfront.net/Assets/logo-henry-white-lg.png)
 
 # **DRIVERS** | Proyecto Individual
@@ -298,3 +299,7 @@ Ten en cuenta que en esta instancia no es obligatorio el desarrollo de testing p
 <div align="center">
 <img src="./F1.svg" alt="" style="margin-top: 30px; width: 300px;" />
 </div>
+=======
+# PI_F1
+PI Boot Camp Henry 2023
+>>>>>>> cf927d06e5e045650022b1c64a1f8151379aea6e
