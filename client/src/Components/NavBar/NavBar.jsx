@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { resetDrivers } from '../../Redux/Actions';
-import './Navbar.css'; // Agrega un archivo CSS separado para tus estilos
+import '../Navbar/Navbar.css'; // Agrega un archivo CSS separado para tus estilos
 
 const Navbar = ({ onHomeClick }) => { // Modifica la firma para recibir props
 
