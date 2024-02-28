@@ -2,14 +2,14 @@ const axios = require("axios");
 const server = require("./src/server");
 const { conn } = require("./src/db.js");
 const { saveDriversToDB } = require("./src/Controllers/driverController"); // Import both functions
+require("dotenv").config();
 
-const PORT = 3002;
 
 conn
   .sync({ alter: true })
   .then(() => {
-    server.listen(PORT, () => {
-      console.log(`Server listening on port ${PORT}`);
+    server.listen(process.env.PORT, () => {
+      console.log("Server listening on", process.env.PORT);
       saveDriversToDB();
     });
   })
