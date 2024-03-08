@@ -3,14 +3,21 @@ const {
   getAllDriversController,
   getDriverByNameController,
   getDriverByIdController,
-  createDriver,
+  createDriverController,
 } = require("../Controllers/driverController");
+
 const router = Router();
 
 // Ruta para obtener todos los conductores
 router.get("/drivers", getAllDriversController);
-router.get("/drivers/id/:idDriver", getDriverByIdController); // Modificación en la ruta para obtener conductor por ID
-router.get("/drivers/name/:name", getDriverByNameController); // Modificación en la ruta para obtener conductor por nombre
-router.post("/drivers", createDriver);
+
+// Ruta para obtener un conductor por su ID
+router.get("/drivers/id/:idDriver", getDriverByIdController);
+
+// Ruta para obtener un conductor por su nombre
+router.get("/drivers/name/:name", getDriverByNameController);
+
+// Ruta para crear un nuevo conductor
+router.post("/drivers", createDriverController);
 
 module.exports = router;
