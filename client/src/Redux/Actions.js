@@ -101,7 +101,7 @@ export const fetchDrivers = () => {
     try {
       dispatch(setLoading(true));
 
-      const response = await axios.get("https://pif1-production.up.railway.app/Driver");
+      const response = await axios.get("https://my-app.up.railway.app/drivers");
 
       console.log("API Response inside action:", response.data);
 
