@@ -70,7 +70,7 @@ const saveDriversToDB = async () => {
 
   try {
     // Obtener datos de conductores desde la API
-    const response = await axios.get("http://localhost:5000/drivers");
+    const response = await axios.get("https://my-app.up.railway.app/drivers");
     const driverData = response.data;
 
     // Formatear los datos de los conductores
