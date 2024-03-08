@@ -7,7 +7,9 @@ const server = express();
 
 server.use(morgan("dev"));
 server.use(express.json());
-server.use(cors());
+server.use(cors({
+  origin: "https://pi-f1.vercel.app/" // Reemplaza esto con el dominio real de tu aplicación en Railway
+}));
 
 server.use(router);
 
