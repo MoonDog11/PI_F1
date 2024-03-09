@@ -5,6 +5,42 @@ const { searchDriversByTeamHandler } = require("../Handlers/driverHandler");
 const { Driver, Team } = require("../db");
 const axios = require("axios");
 
+const formatDriverDataAdvanced = (driverData) => {
+  // Asegurarse de que driverRef tenga un valor predeterminado
+  const driverRef = driverData.driverRef || "defaultDriverRef";
+
+  // Formatear la fecha de nacimiento si está presente
+  const dob = driverData.dob ? new Date(driverData.dob).toISOString() : null;
+
+  // Formatear los equipos como un array de IDs si están presentes
+  const teams = driverData.teams
+    ? driverData.teams.map((team) => team.id)
+    : null;
+
+  return {
+    id: driverData.id || null,
+    driverRef: driverRef,
+    number: driverData.number || null,
+    code: driverData.code || null,
+    name: {
+      forename: driverData.name ? driverData.name.forename || null : null,
+      surname: driverData.name ? driverData.name.surname || null : null,
+    },
+    image: driverData.image
+      ? JSON.stringify({
+          url: driverData.image.url || null,
+          imageby: driverData.image.imageby || null,
+        })
+      : null,
+    dob: dob,
+    nationality: driverData.nationality || null,
+    url: driverData.url || null,
+    teams: teams,
+    description: driverData.description || null,
+  };
+};
+
+
 const saveDriversToDB = async () => {
   try {
     const response = await axios.get("https://pif1-production.up.railway.app/drivers");
