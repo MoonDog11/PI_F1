@@ -7,36 +7,10 @@ const {
   searchDriversByTeamHandler,
 } = require("../Handlers/driverHandler");
 
-const saveDriversToDB = async () => {
-  try {
-    const response = await axios.get("https://pif1-production.up.railway.app/drivers");
-    const driverData = response.data;
-
-    const existingDrivers = await Driver.findAll();
-
-    const newDrivers = driverData.filter((driver) => {
-      return (
-        !existingDrivers.find((existingDriver) => existingDriver.id === driver.id) &&
-        driver.driverRef !== null
-      );
-    });
-
-    if (newDrivers.length > 0) {
-      await Driver.bulkCreate(newDrivers);
-      console.log(`${newDrivers.length} drivers saved to database`);
-    } else {
-      console.log("No new drivers to save");
-    }
-
-    console.log("Driver flags updated");
-  } catch (error) {
-    console.error("Error saving drivers to database:", error);
-  }
-};
-
 const getAllDriversController = async (req, res) => {
   try {
-    const drivers = await getAllDriversHandler(req, res);
+    const response = await axios.get("https://pif1-production.up.railway.app/drivers");
+    const drivers = response.data;
     res.json(drivers);
   } catch (error) {
     console.error("Error al obtener los conductores desde el controlador:", error);
@@ -48,9 +22,7 @@ const getDriverByNameController = async (req, res) => {
   const { name } = req.query;
 
   try {
-    console.log("Searching for driver with name:", name);
     const drivers = await getDriverByNameHandler(name);
-
     res.json(drivers);
   } catch (error) {
     console.error("Error al obtener conductores por nombre:", error);
@@ -111,10 +83,9 @@ const getAllTeamsController = async (req, res) => {
 };
 
 module.exports = {
-  createDriverController,
-  saveDriversToDB,
   getAllDriversController,
   getDriverByNameController,
+  createDriverController,
   getDriverByIdController,
   searchDriversByTeamController,
   getAllTeamsController,
