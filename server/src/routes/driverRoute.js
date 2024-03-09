@@ -18,6 +18,6 @@ router.get("/drivers/id/:idDriver", getDriverByIdController);
 router.get("/drivers/name/:name", getDriverByNameController);
 
 // Ruta para crear un nuevo conductor
-router.post("/drivers", createDriverController);
+router.post("/driver", createDriverController);
 
 module.exports = router;
