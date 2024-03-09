@@ -1,45 +1,11 @@
-const { getAllDriversHandler } = require("../Handlers/driverHandler");
-const { getDriverByNameHandler } = require("../Handlers/driverHandler");
-const { getDriverByIdHandler } = require("../Handlers/driverHandler");
-const { searchDriversByTeamHandler } = require("../Handlers/driverHandler");
-const { Driver, Team } = require("../db");
 const axios = require("axios");
-
-const formatDriverDataAdvanced = (driverData) => {
-  // Asegurarse de que driverRef tenga un valor predeterminado
-  const driverRef = driverData.driverRef || "defaultDriverRef";
-
-  // Formatear la fecha de nacimiento si está presente
-  const dob = driverData.dob ? new Date(driverData.dob).toISOString() : null;
-
-  // Formatear los equipos como un array de IDs si están presentes
-  const teams = driverData.teams
-    ? driverData.teams.map((team) => team.id)
-    : null;
-
-  return {
-    id: driverData.id || null,
-    driverRef: driverRef,
-    number: driverData.number || null,
-    code: driverData.code || null,
-    name: {
-      forename: driverData.name ? driverData.name.forename || null : null,
-      surname: driverData.name ? driverData.name.surname || null : null,
-    },
-    image: driverData.image
-      ? JSON.stringify({
-          url: driverData.image.url || null,
-          imageby: driverData.image.imageby || null,
-        })
-      : null,
-    dob: dob,
-    nationality: driverData.nationality || null,
-    url: driverData.url || null,
-    teams: teams,
-    description: driverData.description || null,
-  };
-};
-
+const { Driver, Team } = require("../db");
+const {
+  getAllDriversHandler,
+  getDriverByNameHandler,
+  getDriverByIdHandler,
+  searchDriversByTeamHandler,
+} = require("../Handlers/driverHandler");
 
 const saveDriversToDB = async () => {
   try {
@@ -70,9 +36,8 @@ const saveDriversToDB = async () => {
 
 const getAllDriversController = async (req, res) => {
   try {
-    // Implementa la lógica para obtener todos los conductores desde la base de datos
-    // o desde la API externa si es necesario
-    res.status(200).json({ message: "Implementación de getAllDriversController" });
+    const drivers = await getAllDriversHandler(req, res);
+    res.json(drivers);
   } catch (error) {
     console.error("Error al obtener los conductores desde el controlador:", error);
     res.status(500).send("Error al obtener los conductores desde el controlador");
@@ -80,9 +45,13 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
+  const { name } = req.query;
+
   try {
-    // Implementa la lógica para obtener un conductor por nombre
-    res.status(200).json({ message: "Implementación de getDriverByNameController" });
+    console.log("Searching for driver with name:", name);
+    const drivers = await getDriverByNameHandler(name);
+
+    res.json(drivers);
   } catch (error) {
     console.error("Error al obtener conductores por nombre:", error);
     res.status(500).send("Error al obtener conductores por nombre");
@@ -90,9 +59,17 @@ const getDriverByNameController = async (req, res) => {
 };
 
 const createDriverController = async (req, res) => {
+  const { name, teams } = req.body;
+
   try {
-    // Implementa la lógica para crear un nuevo conductor
-    res.status(201).json({ message: "Implementación de createDriverController" });
+    const newDriver = await Driver.create({ name });
+    await newDriver.addTeams(teams);
+    const driverWithTeams = await Driver.findByPk(newDriver.id, { include: Team });
+
+    res.status(201).json({
+      message: "Conductor creado exitosamente",
+      driver: driverWithTeams,
+    });
   } catch (error) {
     console.error("Error al crear el conductor:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -100,9 +77,11 @@ const createDriverController = async (req, res) => {
 };
 
 const getDriverByIdController = async (req, res) => {
+  const { idDriver } = req.params;
+
   try {
-    // Implementa la lógica para obtener un conductor por ID
-    res.status(200).json({ message: "Implementación de getDriverByIdController" });
+    const driver = await getDriverByIdHandler(idDriver);
+    res.json(driver);
   } catch (error) {
     console.error("Error al obtener el conductor por ID:", error);
     res.status(500).send("Error al obtener el conductor por ID");
@@ -110,9 +89,11 @@ const getDriverByIdController = async (req, res) => {
 };
 
 const searchDriversByTeamController = async (req, res) => {
+  const { team } = req.query;
+
   try {
-    // Implementa la lógica para buscar conductores por equipo
-    res.status(200).json({ message: "Implementación de searchDriversByTeamController" });
+    const handledDrivers = await searchDriversByTeamHandler(team);
+    res.status(200).json(handledDrivers);
   } catch (error) {
     console.error("Error en la búsqueda de conductores por equipo:", error.message);
     res.status(500).json({ error: "Error en la búsqueda de conductores por equipo" });
@@ -121,14 +102,13 @@ const searchDriversByTeamController = async (req, res) => {
 
 const getAllTeamsController = async (req, res) => {
   try {
-    // Implementa la lógica para obtener todos los equipos desde la base de datos
-    res.status(200).json({ message: "Implementación de getAllTeamsController" });
+    const teams = await Team.findAll();
+    res.status(200).json({ teams });
   } catch (error) {
     console.error("Error fetching teams:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 
 module.exports = {
   createDriverController,
@@ -138,5 +118,4 @@ module.exports = {
   getDriverByIdController,
   searchDriversByTeamController,
   getAllTeamsController,
-  formatDriverDataAdvanced,
 };
