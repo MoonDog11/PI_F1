@@ -3,8 +3,6 @@ const server = require("./src/server");
 const { conn } = require("./src/db.js");
 
 
-
-
 conn
   .sync({ alter: true })
   .then(() => {
