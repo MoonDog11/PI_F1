@@ -7,7 +7,6 @@ const {
   searchDriversByTeamHandler,
 } = require("../Handlers/driverHandler");
 
-
 const getAllDriversController = async (req, res) => {
   try {
     const response = await axios.get(
