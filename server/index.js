@@ -1,7 +1,7 @@
 const axios = require("axios");
 const server = require("./src/server");
 const { conn } = require("./src/db.js");
-const { saveDriversToDB } = require("./src/Handlers/driverHandler.js"); // Import both functions
+const { saveDriversToDB } = require("./src/Controllers/driverController"); // Import both functions
 
 const PORT = 3002;
 
