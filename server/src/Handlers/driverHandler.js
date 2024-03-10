@@ -2,6 +2,36 @@ const { Driver, Team } = require("../db");
 const { Op } = require("sequelize");
 const axios = require("axios");
 
+const loadDriversToRailwayController = async (req, res) => {
+  try {
+    // Obtener todos los conductores de la base de datos local
+    const drivers = await Driver.findAll();
+
+    // Crear una lista de datos de conductores para cargar en Railway
+    const dataToUpload = drivers.map(driver => ({
+      name: driver.name,
+      // Añade aquí cualquier otro campo que necesites cargar en Railway
+    }));
+
+    // Hacer una solicitud a la API de Railway para cargar los datos
+    const response = await axios.post("https://api.railway.app/v1/data/load", {
+      table: "Driver", // Ajusta esto al nombre de tu tabla en Railway
+      data: dataToUpload,
+    });
+
+    // Comprobar si la carga de datos fue exitosa en Railway
+    if (response.status === 200) {
+      res.status(200).json({ message: "Datos de conductores cargados en Railway exitosamente" });
+    } else {
+      throw new Error("Error al cargar los datos en Railway");
+    }
+  } catch (error) {
+    console.error("Error al cargar los datos de los conductores en Railway:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
 const getAllDriversHandler = async (req, res) => {
   try {
     const drivers = await Driver.findAll();
@@ -85,6 +115,7 @@ const searchDriversByTeamHandler = async (team) => {
 };
 
 module.exports = {
+  loadDriversToRailwayController,
   createDriverHandler,
   getAllDriversHandler,
   getDriverByNameHandler,
