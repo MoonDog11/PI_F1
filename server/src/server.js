@@ -8,7 +8,7 @@ const server = express();
 server.use(morgan("dev"));
 server.use(express.json());
 server.use(cors({
-  origin: "https://pif1-production.up.railway.app"
+  origin: "https://pi-f1.vercel.app/"
 }));
 
 server.use(router);
