@@ -2,32 +2,83 @@ const { Driver, Team } = require("../db");
 const { Op } = require("sequelize");
 const axios = require("axios");
 
-const loadDriversToRailwayController = async (req, res) => {
+const saveDriversToDB = async () => {
+  const formatDriverData = (driverData) => {
+    // Asegurarse de que driverRef tenga un valor predeterminado
+    const driverRef = driverData.driverRef || "defaultDriverRef";
+
+    return {
+      id: driverData.id || null,
+      driverRef: driverRef,
+      number: driverData.number || null,
+      code: driverData.code || null,
+      name: {
+        forename: driverData.name ? driverData.name.forename || null : null,
+        surname: driverData.name ? driverData.name.surname || null : null,
+      },
+      image: driverData.image
+        ? JSON.stringify({
+            url: driverData.image.url || null,
+            imageby: driverData.image.imageby || null,
+          })
+        : null,
+      dob: driverData.dob || null,
+      nationality: driverData.nationality || null,
+      url: driverData.url || null,
+      teams: driverData.teams || null,
+      description: driverData.description || null,
+    };
+  };
+
   try {
-    // Obtener todos los conductores de la base de datos local
-    const drivers = await Driver.findAll();
+    // Obtener datos de conductores desde la API
+    const response = await axios.get("http://localhost:5000/drivers");
+    const driverData = response.data;
 
-    // Crear una lista de datos de conductores para cargar en Railway
-    const dataToUpload = drivers.map(driver => ({
-      name: driver.name,
-      // Añade aquí cualquier otro campo que necesites cargar en Railway
-    }));
+    // Formatear los datos de los conductores
+    const drivers = driverData.map((driverData) =>
+      formatDriverData(driverData)
+    );
 
-    // Hacer una solicitud a la API de Railway para cargar los datos
-    const response = await axios.post("https://api.railway.app/v1/data/load", {
-      table: "Driver", // Ajusta esto al nombre de tu tabla en Railway
-      data: dataToUpload,
+    // Obtener conductores existentes de la base de datos
+    const existingDrivers = await Driver.findAll();
+
+    // Filtrar conductores nuevos que no existen en la base de datos
+    const newDrivers = drivers.filter((driver) => {
+      return (
+        !existingDrivers.find(
+          (existingDriver) => existingDriver.id === driver.id
+        ) && driver.driverRef !== null
+      ); // Asegurar que driverRef no sea nulo
     });
 
-    // Comprobar si la carga de datos fue exitosa en Railway
-    if (response.status === 200) {
-      res.status(200).json({ message: "Datos de conductores cargados en Railway exitosamente" });
+    // Crear nuevos conductores en la base de datos
+    if (newDrivers.length > 0) {
+      await Driver.bulkCreate(newDrivers);
+      console.log(`${newDrivers.length} drivers saved to database`);
     } else {
-      throw new Error("Error al cargar los datos en Railway");
+      console.log("No new drivers to save");
     }
+
+    // Actualizar banderas de conductores existentes
+    existingDrivers.forEach(async (existingDriver) => {
+      const matchingDriver = drivers.find(
+        (driver) => driver.id === existingDriver.id
+      );
+
+      if (matchingDriver && matchingDriver.driverRef !== null) {
+        existingDriver.flags = JSON.stringify({
+          png: matchingDriver.flags?.png || existingDriver.flags?.png,
+          svg: matchingDriver.flags?.svg || existingDriver.flags?.svg,
+        });
+
+        await existingDriver.save();
+      }
+    });
+
+    console.log("Driver flags updated");
   } catch (error) {
-    console.error("Error al cargar los datos de los conductores en Railway:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    console.error("Error saving drivers to database:", error);
   }
 };
 
@@ -115,7 +166,7 @@ const searchDriversByTeamHandler = async (team) => {
 };
 
 module.exports = {
-  loadDriversToRailwayController,
+   saveDriversToDB,
   createDriverHandler,
   getAllDriversHandler,
   getDriverByNameHandler,
