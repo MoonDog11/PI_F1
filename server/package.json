@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
   "start": "node index.js"
-  "upload-data": "node api/db.json"
+ 
 
   },
   "author": "",
