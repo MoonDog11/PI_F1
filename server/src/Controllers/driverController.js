@@ -9,7 +9,7 @@ const {
 
 const getAllDriversController = async (req, res) => {
   try {
-    const response = await axios.get("https://pif1-production.up.railway.app/drivers");
+    const response = await axios.get("http://pif1-production.up.railway.app/drivers");
     const drivers = response.data;
     res.json(drivers);
   } catch (error) {
