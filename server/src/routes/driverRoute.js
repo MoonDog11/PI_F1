@@ -1,6 +1,5 @@
 const { Router } = require("express");
-const fs = require("fs");
-const path = require("path");
+
 const {
   getAllDriversController,
   getDriverByNameController,
@@ -10,20 +9,7 @@ const {
 
 const router = Router();
 
-router.get("/database", (req, res) => {
-  try {
-    // Leer el archivo db.json
-    const dbPath = path.join(__dirname, "../api/db.json");
-    const data = fs.readFileSync(dbPath, "utf8");
-    
-    // Convertir los datos a JSON y enviarlos como respuesta
-    const jsonData = JSON.parse(data);
-    res.json(jsonData);
-  } catch (error) {
-    console.error("Error al leer la base de datos:", error);
-    res.status(500).send("Error al leer la base de datos");
-  }
-});
+
 
 // Ruta para obtener todos los conductores
 router.get("/drivers", getAllDriversController);
