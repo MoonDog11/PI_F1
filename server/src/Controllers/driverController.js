@@ -10,6 +10,7 @@ const {
 const saveDataToDatabase = async (tableName, data) => {
   try {
     await tableName.bulkCreate(data);
+    console.log(`Data saved successfully to ${tableName}`);
     return { success: true, message: `Data saved successfully to ${tableName}` };
   } catch (error) {
     console.error(`Error saving data to ${tableName}:`, error);
