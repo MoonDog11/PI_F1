@@ -7,6 +7,16 @@ const {
   searchDriversByTeamHandler,
 } = require("../Handlers/driverHandler");
 
+const saveDataToDatabase = async (tableName, data) => {
+  try {
+    await tableName.bulkCreate(data);
+    return { success: true, message: `Data saved successfully to ${tableName}` };
+  } catch (error) {
+    console.error(`Error saving data to ${tableName}:`, error);
+    return { success: false, error: `Error saving data to ${tableName}` };
+  }
+};
+
 const getAllDriversController = async (req, res) => {
   try {
     const response = await axios.get(
@@ -47,10 +57,16 @@ const createDriverController = async (req, res) => {
       include: Team,
     });
 
-    res.status(201).json({
-      message: "Conductor creado exitosamente",
-      driver: driverWithTeams,
-    });
+    const saveResult = await saveDataToDatabase(Driver, driverWithTeams);
+    
+    if (saveResult.success) {
+      res.status(201).json({
+        message: "Conductor creado exitosamente",
+        driver: driverWithTeams,
+      });
+    } else {
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
   } catch (error) {
     console.error("Error al crear el conductor:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -103,4 +119,5 @@ module.exports = {
   getDriverByIdController,
   searchDriversByTeamController,
   getAllTeamsController,
+  saveDataToDatabase,
 };
