@@ -41,33 +41,6 @@ const formatDriverDataAdvanced = (driverData) => {
 };
 
 const saveDriversToDB = async () => {
-  const formatDriverData = (driverData) => {
-    // Asegurarse de que driverRef tenga un valor predeterminado
-    const driverRef = driverData.driverRef || "defaultDriverRef";
-
-    return {
-      id: driverData.id || null,
-      driverRef: driverRef,
-      number: driverData.number || null,
-      code: driverData.code || null,
-      name: {
-        forename: driverData.name ? driverData.name.forename || null : null,
-        surname: driverData.name ? driverData.name.surname || null : null,
-      },
-      image: driverData.image
-        ? JSON.stringify({
-            url: driverData.image.url || null,
-            imageby: driverData.image.imageby || null,
-          })
-        : null,
-      dob: driverData.dob || null,
-      nationality: driverData.nationality || null,
-      url: driverData.url || null,
-      teams: driverData.teams || null,
-      description: driverData.description || null,
-    };
-  };
-
   try {
     // Obtener datos de conductores desde la API
     const response = await axios.get("http://localhost:5000/drivers");
@@ -75,7 +48,7 @@ const saveDriversToDB = async () => {
 
     // Formatear los datos de los conductores
     const drivers = driverData.map((driverData) =>
-      formatDriverData(driverData)
+      formatDriverDataAdvanced(driverData)
     );
 
     // Obtener conductores existentes de la base de datos
