@@ -114,6 +114,7 @@ const getAllTeamsController = async (req, res) => {
 };
 
 module.exports = {
+  saveDataToDatabase,
   getAllDriversController,
   getDriverByNameController,
   createDriverController,
