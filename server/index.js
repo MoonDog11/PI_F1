@@ -11,7 +11,7 @@ conn
   .then(() => {
     server.listen(process.env.PORT, () => {
       console.log(`Server listening on port, ${process.env.PORT}`);
-      saveDataToDatabase();
+      
     });
   })
   .catch((error) => console.error(error));
