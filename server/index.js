@@ -5,11 +5,10 @@ require("dotenv").config();
 const { PORT } = process.env;
 
 conn
-  .sync({ force: true })
+  .sync()
   .then(() => {
     server.listen(PORT, () => {
-      console.log(`Server listening on port, process.env. ${PORT}`);
+      console.log(`Server listening on port ${PORT}`);
     });
   })
   .catch((error) => console.error(error));
-
