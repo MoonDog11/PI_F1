@@ -3,10 +3,10 @@ const { Sequelize } = require("sequelize");
 
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env; // Se añade DB_PORT
 
 const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, // Se incluye DB_PORT en la URL de conexión
   {
     logging: false,
     native: false,
@@ -48,6 +48,6 @@ Driver.belongsToMany(Team, { through: DriverTeam });
 Team.belongsToMany(Driver, { through: DriverTeam });
 
 module.exports = {
-  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
-  conn: sequelize, // para importart la conexión { conn } = require('./db.js');
+  ...sequelize.models,
+  conn: sequelize,
 };
