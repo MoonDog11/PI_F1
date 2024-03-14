@@ -5,120 +5,28 @@ const { searchDriversByTeamHandler } = require("../Handlers/driverHandler");
 const { Driver, Team } = require("../db");
 const axios = require("axios");
 
-const formatDriverDataAdvanced = (driverData) => {
-  // Asegurarse de que driverRef tenga un valor predeterminado
-  const driverRef = driverData.driverRef || "defaultDriverRef";
-
-  // Formatear la fecha de nacimiento si está presente
-  const dob = driverData.dob ? new Date(driverData.dob).toISOString() : null;
-
-  // Formatear los equipos como un array de IDs si están presentes
-  const teams = driverData.teams
-    ? driverData.teams.map((team) => team.id)
-    : null;
-
-  return {
-    id: driverData.id || null,
-    driverRef: driverRef,
-    number: driverData.number || null,
-    code: driverData.code || null,
-    name: {
-      forename: driverData.name ? driverData.name.forename || null : null,
-      surname: driverData.name ? driverData.name.surname || null : null,
-    },
-    image: driverData.image
-      ? JSON.stringify({
-          url: driverData.image.url || null,
-          imageby: driverData.image.imageby || null,
-        })
-      : null,
-    dob: dob,
-    nationality: driverData.nationality || null,
-    url: driverData.url || null,
-    teams: teams,
-    description: driverData.description || null,
-  };
-};
-
-const saveDriversToDB = async () => {
-  const formatDriverData = (driverData) => {
-    // Asegurarse de que driverRef tenga un valor predeterminado
-    const driverRef = driverData.driverRef || "defaultDriverRef";
-
-    return {
-      id: driverData.id || null,
-      driverRef: driverRef,
-      number: driverData.number || null,
-      code: driverData.code || null,
-      name: {
-        forename: driverData.name ? driverData.name.forename || null : null,
-        surname: driverData.name ? driverData.name.surname || null : null,
-      },
-      image: driverData.image
-        ? JSON.stringify({
-            url: driverData.image.url || null,
-            imageby: driverData.image.imageby || null,
-          })
-        : null,
-      dob: driverData.dob || null,
-      nationality: driverData.nationality || null,
-      url: driverData.url || null,
-      teams: driverData.teams || null,
-      description: driverData.description || null,
-    };
-  };
-
-  try {
-    // Obtener datos de conductores desde la API
-    const response = await axios.get("http://localhost:5000/drivers");
-    const driverData = response.data;
-
-    // Formatear los datos de los conductores
-    const drivers = driverData.map((driverData) =>
-      formatDriverData(driverData)
-    );
-
-    // Obtener conductores existentes de la base de datos
-    const existingDrivers = await Driver.findAll();
-
-    // Filtrar conductores nuevos que no existen en la base de datos
-    const newDrivers = drivers.filter((driver) => {
-      return (
-        !existingDrivers.find(
-          (existingDriver) => existingDriver.id === driver.id
-        ) && driver.driverRef !== null
-      ); // Asegurar que driverRef no sea nulo
-    });
-
-    // Crear nuevos conductores en la base de datos
-    if (newDrivers.length > 0) {
-      await Driver.bulkCreate(newDrivers);
-      console.log(`${newDrivers.length} drivers saved to database`);
-    } else {
-      console.log("No new drivers to save");
-    }
-
-    // Actualizar banderas de conductores existentes
-    existingDrivers.forEach(async (existingDriver) => {
-      const matchingDriver = drivers.find(
-        (driver) => driver.id === existingDriver.id
-      );
-
-      if (matchingDriver && matchingDriver.driverRef !== null) {
-        existingDriver.flags = JSON.stringify({
-          png: matchingDriver.flags?.png || existingDriver.flags?.png,
-          svg: matchingDriver.flags?.svg || existingDriver.flags?.svg,
-        });
-
-        await existingDriver.save();
-      }
-    });
-
-    console.log("Driver flags updated");
+ try {
+    const response = await axios.post('https://your-railway-server.com/api/save-data', data);
+    console.log('Datos enviados correctamente al servidor en Railway:', response.data);
   } catch (error) {
-    console.error("Error saving drivers to database:", error);
+    console.error('Error al enviar datos al servidor en Railway:', error);
   }
-};
+}
+
+// Función principal para ejecutar el proceso completo
+async function main() {
+  // Paso 1: Verificar que el servidor local esté en funcionamiento
+  // (No olvides iniciar tu servidor local antes de ejecutar esta función)
+
+  // Paso 2: Conexión al servidor local y obtención de datos
+  const localData = await fetchDataFromLocalhost();
+
+  // Paso 4: Envío de datos procesados al servidor en Railway
+  await sendDataToRailwayServer(localData);
+}
+
+// Ejecutar la función principal
+main();
 const getAllDriversController = async (req, res) => {
   try {
     const drivers = await getAllDriversHandler(req, res);
