@@ -175,6 +175,7 @@ const getAllTeamsController = async (req, res, next) => {
 };
 
 module.exports = {
+ 
   createDriverController,
   saveDriversToDB,
   getAllDriversController,
@@ -183,4 +184,5 @@ module.exports = {
   searchDriversByTeamController,
   getAllTeamsController,
  fetchDataFromLocalhost,
+ 
 };
