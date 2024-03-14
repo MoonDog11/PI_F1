@@ -171,5 +171,4 @@ module.exports = {
   getDriverByIdController,
   searchDriversByTeamController,
   getAllTeamsController,
-  formatDriverDataAdvanced,
 };
