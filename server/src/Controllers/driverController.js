@@ -30,6 +30,17 @@ async function main() {
 // Ejecutar la función principal
 main();
 
+async function fetchDataFromLocalhost() {
+  try {
+    const response = await axios.get('http://localhost:5000/drivers');
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error('Error al obtener datos del servidor local:', error);
+    throw error; // Puedes manejar el error aquí o lanzarlo para manejarlo en otro lugar
+  }
+}
+
 
 const getAllDriversController = async (req, res) => {
   try {
@@ -171,4 +182,5 @@ module.exports = {
   getDriverByIdController,
   searchDriversByTeamController,
   getAllTeamsController,
+ fetchDataFromLocalhost,
 };
