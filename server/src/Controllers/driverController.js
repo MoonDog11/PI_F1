@@ -5,6 +5,8 @@ const { searchDriversByTeamHandler } = require("../Handlers/driverHandler");
 const { Driver, Team } = require("../db");
 const axios = require("axios");
 
+
+const saveDriversToDB = async (data) => {
  try {
     const response = await axios.post('https://your-railway-server.com/api/save-data', data);
     console.log('Datos enviados correctamente al servidor en Railway:', response.data);
@@ -27,6 +29,8 @@ async function main() {
 
 // Ejecutar la función principal
 main();
+
+
 const getAllDriversController = async (req, res) => {
   try {
     const drivers = await getAllDriversHandler(req, res);
