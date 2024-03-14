@@ -4,6 +4,8 @@ const { conn } = require("./src/db.js");
 require("dotenv").config();
 const { saveDriversToDB } = require("./src/Controllers/driverController"); 
 
+const { PORT } = process.env;
+
 conn
   .sync({ alter: true })
   .then(() => {
