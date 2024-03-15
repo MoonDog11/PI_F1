@@ -135,6 +135,15 @@ const getAllTeamsController = async (req, res, next) => {
   }
 };
 
+async function saveDriversToLocalhost(data) {
+  try {
+    const response = await axios.post('http://localhost:3001/drivers', data);
+    console.log('Datos enviados correctamente al servidor local en el puerto 3001:', response.data);
+  } catch (error) {
+    console.error('Error al enviar datos al servidor local en el puerto 3001:', error);
+  }
+}
+
 module.exports = {
   createDriverController,
   saveDriversToDB,
@@ -144,4 +153,5 @@ module.exports = {
   searchDriversByTeamController,
   getAllTeamsController,
   fetchDataFromLocalhost,
+  saveDriversToLocalhost,
 };
