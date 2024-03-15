@@ -33,7 +33,7 @@ async function fetchDataFromLocalhost() {
   }
 }
 
-const getAllDriversController async (req, res) => {
+const getAllDriversController = async (req, res) => {
   try {
     // Obtener los datos de los conductores del servidor local en el puerto 5000
     const response = await axios.get('http://localhost:5000/drivers');
