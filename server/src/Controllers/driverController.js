@@ -34,7 +34,8 @@ async function fetchDataFromLocalhost() {
 
 const getAllDriversController = async (req, res) => {
   try {
-    const drivers = await getAllDriversHandler(req, res);
+    // Aquí obtienes los conductores directamente de tu base de datos local
+    const drivers = await Driver.findAll();
     res.json(drivers);
   } catch (error) {
     console.error("Error al obtener los conductores desde el controlador:", error);
