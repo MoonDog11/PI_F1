@@ -24,7 +24,7 @@ main();
 
 async function fetchDataFromLocalhost() {
   try {
-    const response = await axios.get('http://localhost:5001/drivers');
+    const response = await axios.get('http://localhost:3001/drivers');
     return response.data;
   } catch (error) {
     console.error('Error al obtener datos del servidor local:', error);
@@ -113,7 +113,7 @@ const searchDriversByTeamController = async (req, res) => {
   const { team } = req.query;
 
   try {
-    const response = await axios.get(`http://localhost:5000/drivers?team=${team}`);
+    const response = await axios.get(`http://localhost:3001/drivers?team=${team}`);
     const drivers = response.data;
 
     const handledDrivers = await searchDriversByTeamHandler(team);
