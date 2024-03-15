@@ -33,14 +33,20 @@ async function fetchDataFromLocalhost() {
   }
 }
 
-const getAllDriversController = async (req, res) => {
+const getAllDriversController async (req, res) => {
   try {
-    // Aquí obtienes los conductores directamente de tu base de datos local
-    const drivers = await Driver.findAll();
+    // Obtener los datos de los conductores del servidor local en el puerto 5000
+    const response = await axios.get('http://localhost:5000/drivers');
+    const drivers = response.data;
+
+    // Enviar los datos de los conductores al servidor en Railway
+    await saveDriversToDB(drivers);
+
+    // Responder con los datos de los conductores obtenidos del servidor local
     res.json(drivers);
   } catch (error) {
-    console.error("Error al obtener los conductores desde el controlador:", error);
-    res.status(500).send("Error al obtener los conductores desde el controlador");
+    console.error("Error al obtener los conductores desde el handler:", error);
+    res.status(500).send("Error al obtener los conductores desde el handler");
   }
 };
 
