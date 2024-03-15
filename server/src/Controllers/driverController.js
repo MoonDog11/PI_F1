@@ -4,7 +4,7 @@ const axios = require("axios");
 
 const saveDriversToDB = async (data) => {
  try {
-    const response = await axios.post('https:postgresql://postgres:TcoTTVSgfxNVmfkGXvPAaWpyPPIQYTFk@roundhouse.proxy.rlwy.net:52869/railway', data);
+    const response = await axios.post('pif1-production.up.railway.app/drivers', data);
     console.log('Datos enviados correctamente al servidor en Railway:', response.data);
   } catch (error) {
     console.error('Error al enviar datos al servidor en Railway:', error);
