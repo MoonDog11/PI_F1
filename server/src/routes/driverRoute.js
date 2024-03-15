@@ -1,5 +1,4 @@
 const { Router } = require("express");
-
 const {
   getAllDriversController,
   getDriverByNameController,
@@ -9,8 +8,6 @@ const {
 } = require("../Controllers/driverController");
 
 const router = Router();
-
-
 
 // Ruta para obtener todos los conductores
 router.get("/drivers", getAllDriversController);
@@ -24,7 +21,7 @@ router.get("/drivers/name/:name", getDriverByNameController);
 // Ruta para crear un nuevo conductor
 router.post("/drivers", createDriverController);
 
-router.post("/drivers", saveDriversToLocalhost);
-
+// Nueva ruta para guardar los conductores en localhost
+router.post("/drivers/local", saveDriversToLocalhost);
 
 module.exports = router;
