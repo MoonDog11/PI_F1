@@ -2,114 +2,92 @@ const { Driver, Team } = require("../db");
 const { Op } = require("sequelize");
 const axios = require("axios");
 
-const getAllDriversController = async (req, res) => {
+const getAllDriversHandler = async (req, res) => {
   try {
-    // Aquí realizamos una solicitud a la API de Railway para obtener todos los conductores
-    const response = await axios.get("https://pif1-production.up.railway.app/api/drivers");
-    const drivers = response.data;
+    const drivers = await Driver.findAll();
     res.json(drivers);
   } catch (error) {
-    console.error("Error al obtener los conductores desde el controlador:", error);
-    res.status(500).send("Error al obtener los conductores desde el controlador");
+    console.error("Error al obtener los conductores desde el handler:", error);
+    res.status(500).send("Error al obtener los conductores desde el handler");
   }
 };
 
-const getDriverByNameController = async (req, res) => {
-  const { name } = req.query;
-
+const createDriverHandler = async (req, res) => {
   try {
-    console.log("Buscando conductor con nombre:", name);
-    // Hacemos una solicitud a la API de Railway para buscar conductores por nombre
-    const response = await axios.get(`https://pif1-production.up.railway.app/api/drivers?name=${name}`);
-    const drivers = response.data;
-
-    if (drivers.length > 0) {
-      console.log("Conductores encontrados:", drivers);
-      res.json(drivers);
-    } else {
-      console.log("Conductor no encontrado");
-      res.status(404).send("Conductor no encontrado");
-    }
+    await createDriverController(req, res);
   } catch (error) {
-    console.error("Error al obtener conductores por nombre:", error);
-    res.status(500).send("Error al obtener conductores por nombre");
+    console.error("Error en el controlador del conductor:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
-const createDriverController = async (req, res) => {
-  const { name, teams } = req.body;
-
-  // Verificar si se proporcionaron los datos necesarios
-  if (!name || !teams || teams.length === 0) {
-    return res
-      .status(400)
-      .json({ error: "El nombre y al menos un equipo son obligatorios." });
-  }
-
+const getDriverByIdHandler = async (idDriver) => {
   try {
-    // Hacemos una solicitud a la API de Railway para crear un nuevo conductor
-    const response = await axios.post("https://pif1-production.up.railway.app/api/drivers", { name, teams });
-    const { driver } = response.data;
-    res.status(201).json({
-      message: "Conductor creado exitosamente",
-      driver,
+    const driver = await Driver.findByPk(idDriver, {
+      include: Team,
     });
+
+    return driver;
   } catch (error) {
-    console.error("Error al crear el conductor:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    console.error(
+      "Error al obtener el conductor por ID desde el handler:",
+      error
+    );
+    throw error;
   }
 };
-
-const getDriverByIdController = async (req, res) => {
-  const { idDriver } = req.params;
-
+const getDriverByNameHandler = async (name) => {
   try {
-    // Hacemos una solicitud a la API de Railway para obtener un conductor por su ID
-    const response = await axios.get(`https://pif1-production.up.railway.app/api/drivers/${idDriver}`);
-    const driver = response.data;
+    console.log("Searching for driver in the database with name:", name);
+    // Convertir el nombre a minúsculas antes de la búsqueda
+    const lowercaseName = name.toLowerCase();
 
-    if (driver) {
-      res.json(driver);
+    // Verificar si el parámetro parece ser solo un apellido
+    const isSurname = name.includes(".");
+
+    // Construir la parte de la URL según si es un apellido o un nombre
+    let url;
+    if (isSurname) {
+      url = `http://localhost:5000/drivers?name.surname=${lowercaseName}`;
     } else {
-      res.status(404).send("Conductor no encontrado");
+      url = `http://localhost:5000/drivers?name.forename=${lowercaseName}`;
     }
+
+    console.log("API URL:", url);
+
+    // Realizar la solicitud a la API
+    const response = await fetch(url);
+    const data = await response.json();
+
+    console.log("API Response inside action:", data);
+
+    return data;
   } catch (error) {
-    console.error("Error al obtener el conductor por ID:", error);
-    res.status(500).send("Error al obtener el conductor por ID");
+    console.error("Error al buscar conductores por nombre:", error);
+    throw error;
   }
 };
 
-const searchDriversByTeamController = async (req, res) => {
-  const { team } = req.query;
-
+const searchDriversByTeamHandler = async (team) => {
   try {
-    // Hacemos una solicitud a la API de Railway para buscar conductores por equipo
-    const response = await axios.get(`https://pif1-production.up.railway.app/api/drivers?team=${team}`);
-    const drivers = response.data;
-    res.status(200).json(drivers);
-  } catch (error) {
-    console.error("Error en la búsqueda de conductores por equipo:", error.message);
-    res.status(500).json({ error: "Error en la búsqueda de conductores por equipo" });
-  }
-};
+    // Aquí puedes realizar cualquier manipulación o procesamiento adicional de los conductores si es necesario
+    console.log("Equipo proporcionado:", team);
 
-const getAllTeamsController = async (req, res, next) => {
-  try {
-    // Hacemos una solicitud a la API de Railway para obtener todos los equipos
-    const response = await axios.get("https://pif1-production.up.railway.app/api/teams");
-    const teams = response.data;
-    res.status(200).json({ teams });
+    // Simplemente devolvemos un objeto de ejemplo por ahora
+    return { message: `Drivers encontrados para el equipo ${team}` };
   } catch (error) {
-    console.error("Error al obtener los equipos:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    console.error(
+      "Error en la búsqueda de conductores por equipo:",
+      error.message
+    );
+    throw error;
   }
 };
 
 module.exports = {
-  createDriverController,
-  getAllDriversController,
-  getDriverByNameController,
-  getDriverByIdController,
-  searchDriversByTeamController,
-  getAllTeamsController,
+  createDriverHandler,
+  getAllDriversHandler,
+  getDriverByNameHandler,
+  getDriverByIdHandler,
+  searchDriversByTeamHandler,
 };
