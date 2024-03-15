@@ -4,7 +4,7 @@
   "description": "Server Proyecto Individual",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node index.js\" \"json-server --watch db.json --port 5000\"",
+    "start": "concurrently \"node index.js\" \"json-server --watch db.json --port 5001\"",
     "start-local": "node index.js",
     "start-railway": "json-server --watch db.json --port $PORT"
   },
