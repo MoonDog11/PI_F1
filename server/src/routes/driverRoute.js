@@ -5,6 +5,7 @@ const {
   getDriverByNameController,
   getDriverByIdController,
   createDriverController,
+  saveDriversToLocalhost,
 } = require("../Controllers/driverController");
 
 const router = Router();
@@ -22,6 +23,8 @@ router.get("/drivers/name/:name", getDriverByNameController);
 
 // Ruta para crear un nuevo conductor
 router.post("/drivers", createDriverController);
+
+router.post("/drivers", saveDriversToLocalhost);
 
 
 module.exports = router;
