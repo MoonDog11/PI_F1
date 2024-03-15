@@ -1,7 +1,7 @@
 const express = require('express');
 const server = require('./src/server');
 const { conn } = require('./src/db.js');
-const { saveDriversToDB } = require('./src/controllers/driverController');
+const { saveDriversToDB } = require("../server/src/Controllers/driverController"); 
 
 require('dotenv').config();
 
