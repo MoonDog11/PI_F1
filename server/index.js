@@ -15,7 +15,7 @@ server.listen(PORT, () => {
 });
 
 // Inicia un servidor local en el puerto 5000
-const localPort = 5000;
+const localPort = 3001;
 app.listen(localPort, () => {
   console.log(`Local server listening on port ${localPort}`);
 });
