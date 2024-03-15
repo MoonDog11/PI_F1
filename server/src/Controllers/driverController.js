@@ -14,7 +14,8 @@ const saveDriversToDB = async (data) => {
 async function main() {
   try {
     const localData = await fetchDataFromLocalhost();
-    await saveDriversToDB(localData);
+    await saveDriversToDB(localData); // Esto envía los datos a tu servidor en Railway
+    await saveDriversToLocalhost(localData); // Esto envía los datos a tu servidor local en el puerto 3001
   } catch (error) {
     console.error('Error en el proceso principal:', error);
   }
