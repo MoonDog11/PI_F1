@@ -15,7 +15,6 @@ async function main() {
   try {
     const localData = await fetchDataFromLocalhost();
     await saveDriversToDB(localData); // Esto envía los datos a tu servidor en Railway
-    await saveDriversToLocalhost(localData); // Esto envía los datos a tu servidor local en el puerto 3001
   } catch (error) {
     console.error('Error en el proceso principal:', error);
   }
@@ -121,7 +120,7 @@ const searchDriversByTeamController = async (req, res) => {
   const { team } = req.query;
 
   try {
-    const response = await axios.get(`http://localhost:3001/drivers?team=${team}`);
+    const response = await axios.get(`http://localhost:5000/drivers?team=${team}`);
     const drivers = response.data;
 
     const handledDrivers = await searchDriversByTeamHandler(team);
