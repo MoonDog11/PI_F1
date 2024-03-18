@@ -41,7 +41,7 @@ async function saveDriversToLocalhost(req, res) {
   }
 }
 
-main();
+
 
 async function fetchDataFromLocalhost() {
   try {
