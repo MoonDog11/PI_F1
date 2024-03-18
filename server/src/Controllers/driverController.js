@@ -66,7 +66,7 @@ const getAllDriversController = async (req, res) => {
     const drivers = response.data;
 
     // Enviar los datos de los conductores al servidor en Railway
-    await saveDriversToDB(drivers);
+    await saveDriversToLocalhost(drivers);
 
     // Responder con los datos de los conductores obtenidos del servidor local
     res.json(drivers);
