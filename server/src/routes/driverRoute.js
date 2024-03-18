@@ -5,6 +5,7 @@ const {
   getDriverByIdController,
   createDriverController,
   saveDriversToDB,
+  saveDriversToLocalhost,
 } = require("../Controllers/driverController");
 
 const router = Router();
@@ -22,6 +23,6 @@ router.get("/drivers/name/:name", getDriverByNameController);
 router.post("/drivers", createDriverController);
 
 // Nueva ruta para guardar los conductores en localhost
-router.post("/drivers/local", saveDriversToDB);
+router.post("/drivers/local", saveDriversToLocalhost);
 
 module.exports = router;
