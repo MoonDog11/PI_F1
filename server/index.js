@@ -9,10 +9,13 @@ require('dotenv').config();
 const { PORT } = process.env;
 const app = express();
 
+// Middleware para las rutas de los conductores
+app.use(driverRoutes);
+
 // Inicia el servidor proporcionado por Railway
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-saveDriversToLocalhost();
+  saveDriversToLocalhost();
 });
 
 // Inicia un servidor local en el puerto 5000
