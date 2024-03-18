@@ -34,14 +34,20 @@ async function saveDriversToLocalhost(req, res) {
   try {
     const driversData = await fetchDataFromLocalhost(); // Obtener datos de los conductores desde el servidor local
     await Driver.bulkCreate(driversData, { ignoreDuplicates: true }); // Guardar los conductores en la base de datos local
-    res.status(200).send("Drivers saved to localhost successfully");
+    if (res) {
+      res.status(200).send("Drivers saved to localhost successfully");
+    } else {
+      console.log("No response object provided. Unable to send response.");
+    }
   } catch (error) {
     console.error("Error saving drivers to localhost:", error);
-    res.status(500).send("Error saving drivers to localhost");
+    if (res) {
+      res.status(500).send("Error saving drivers to localhost");
+    } else {
+      console.log("No response object provided. Unable to send error response.");
+    }
   }
 }
-
-
 
 async function fetchDataFromLocalhost() {
   try {
