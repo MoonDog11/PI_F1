@@ -70,11 +70,16 @@ const getAllDriversController = async (req, res) => {
     const response = await axios.get('http://localhost:5000/drivers');
     const drivers = response.data;
 
-    // Enviar los datos de los conductores al servidor en Railway
-    await saveDriversToLocalhost(drivers);
+    if (Array.isArray(drivers)) { // Verificar si drivers es un array
+      // Enviar los datos de los conductores al servidor en Railway
+      await saveDriversToLocalhost(req, res, drivers);
 
-    // Responder con los datos de los conductores obtenidos del servidor local
-    res.json(drivers);
+      // Responder con los datos de los conductores obtenidos del servidor local
+      res.json(drivers);
+    } else {
+      console.error("Data fetched from the server is not in the expected format:", drivers);
+      res.status(500).send("Error fetching drivers from the server");
+    }
   } catch (error) {
     console.error("Error al obtener los conductores desde el handler:", error);
     res.status(500).send("Error al obtener los conductores desde el handler");
