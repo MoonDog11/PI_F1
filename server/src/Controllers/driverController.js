@@ -30,21 +30,14 @@ const formatDriverData = (driverData) => {
   };
 };
 
-const saveDriversToDB = async (data) => {
- try {
-    const response = await axios.post('http://pif1-production.up.railway.app/drivers/local', data);
-    console.log('Datos enviados correctamente al servidor en Railway:', response.data);
-  } catch (error) {
-    console.error('Error al enviar datos al servidor en Railway:', error);
-  }
-}
-
-async function main() {
+async function saveDriversToLocalhost(req, res) {
   try {
-    const localData = await fetchDataFromLocalhost();
-    await saveDriversToDB(localData); // Esto envía los datos a tu servidor en Railway
+    const driversData = await fetchDataFromLocalhost(); // Obtener datos de los conductores desde el servidor local
+    await Driver.bulkCreate(driversData); // Guardar los conductores en la base de datos local
+    res.status(200).send("Drivers saved to localhost successfully");
   } catch (error) {
-    console.error('Error en el proceso principal:', error);
+    console.error("Error saving drivers to localhost:", error);
+    res.status(500).send("Error saving drivers to localhost");
   }
 }
 
@@ -172,7 +165,7 @@ const getAllTeamsController = async (req, res, next) => {
 
 module.exports = {
   createDriverController,
-  saveDriversToDB,
+  saveDriversToLocalhost,
   getAllDriversController,
   getDriverByNameController,
   getDriverByIdController,
