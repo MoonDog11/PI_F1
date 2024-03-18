@@ -2,6 +2,7 @@ const express = require('express');
 const server = require('./src/server');
 const { conn } = require('./src/db.js');
 const { createDriverController, saveDriversToLocalhost, getAllDriversController, getDriverByNameController, getDriverByIdController, searchDriversByTeamController, getAllTeamsController, fetchDataFromLocalhost } = require("./src/Controllers/driverController.js");
+const driverRoutes = require('./src/routes/driverRoute.js');
 
 require('dotenv').config();
 
