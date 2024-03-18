@@ -183,6 +183,18 @@ const getAllTeamsController = async (req, res, next) => {
   }
 };
 
+const getLocalDriversController = async (req, res) => {
+  try {
+    // Aquí puedes escribir el código para recuperar los conductores de la base de datos
+    const drivers = await Driver.findAll(); // Suponiendo que tienes un modelo Driver
+
+    // Enviar los conductores como respuesta
+    res.status(200).json(drivers);
+  } catch (error) {
+    console.error("Error al obtener los conductores locales:", error);
+    res.status(500).json({ error: "Error al obtener los conductores locales" });
+  }
+};
 
 module.exports = {
   createDriverController,
@@ -193,4 +205,5 @@ module.exports = {
   searchDriversByTeamController,
   getAllTeamsController,
   fetchDataFromLocalhost,
+  getLocalDriversController,
 };
