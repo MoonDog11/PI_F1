@@ -185,10 +185,7 @@ const getAllTeamsController = async (req, res, next) => {
 
 const getLocalDriversController = async (req, res) => {
   try {
-    // Aquí puedes escribir el código para recuperar los conductores de la base de datos
-    const drivers = await Driver.findAll(); // Suponiendo que tienes un modelo Driver
-
-    // Enviar los conductores como respuesta
+    const drivers = await Driver.findAll();
     res.status(200).json(drivers);
   } catch (error) {
     console.error("Error al obtener los conductores locales:", error);
