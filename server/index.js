@@ -16,6 +16,7 @@ app.use(driverRoutes);
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
   saveDriversToLocalhost();
+  getLocalDriversController();
 });
 
 // Inicia un servidor local en el puerto 5000
