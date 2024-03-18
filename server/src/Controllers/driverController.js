@@ -32,7 +32,13 @@ const formatDriverData = (driverData) => {
 
 async function saveDriversToLocalhost(req, res, driversData) {
   try {
-    await Driver.bulkCreate(driversData, { ignoreDuplicates: true }); // Guardar los conductores en la base de datos local
+    if (!driversData || driversData.length === 0) {
+      console.log("No drivers data provided.");
+      return;
+    }
+
+    await Driver.bulkCreate(driversData, { ignoreDuplicates: true });
+    
     if (res) {
       res.status(200).send("Drivers saved to localhost successfully");
     } else {
