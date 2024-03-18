@@ -5,7 +5,7 @@ const {
   getDriverByIdController,
   createDriverController,
   saveDriversToDB,
-  saveDriversToLocalhost,
+ saveDriversToLocalhost,
 } = require("../Controllers/driverController");
 
 const router = Router();
