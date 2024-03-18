@@ -74,6 +74,9 @@ const getAllDriversController = async (req, res) => {
     const drivers = response.data;
 
     if (Array.isArray(drivers)) { // Verificar si drivers es un array
+      // Imprimir los datos de los conductores para verificar si están presentes y en el formato correcto
+      console.log("Drivers data retrieved:", drivers);
+
       // Enviar los datos de los conductores al servidor en Railway
       await saveDriversToLocalhost(req, res, drivers);
 
@@ -88,7 +91,6 @@ const getAllDriversController = async (req, res) => {
     res.status(500).send("Error al obtener los conductores desde el handler");
   }
 };
-
 const getDriverByNameController = async (req, res) => {
   const { name } = req.query;
 
