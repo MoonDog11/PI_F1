@@ -2,6 +2,34 @@ const { getAllDriversHandler, getDriverByNameHandler, getDriverByIdHandler, sear
 const { Driver, Team } = require("../db");
 const axios = require("axios");
 
+
+const formatDriverData = (driverData) => {
+  // Asegurarse de que driverRef tenga un valor predeterminado
+  const driverRef = driverData.driverRef || "defaultDriverRef";
+
+  return {
+    id: driverData.id || null,
+    driverRef: driverRef,
+    number: driverData.number || null,
+    code: driverData.code || null,
+    name: {
+      forename: driverData.name ? driverData.name.forename || null : null,
+      surname: driverData.name ? driverData.name.surname || null : null,
+    },
+    image: driverData.image
+      ? JSON.stringify({
+          url: driverData.image.url || null,
+          imageby: driverData.image.imageby || null,
+        })
+      : null,
+    dob: driverData.dob || null,
+    nationality: driverData.nationality || null,
+    url: driverData.url || null,
+    teams: driverData.teams || null,
+    description: driverData.description || null,
+  };
+};
+
 const saveDriversToDB = async (data) => {
  try {
     const response = await axios.post('http://pif1-production.up.railway.app/drivers/local', data);
