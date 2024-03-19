@@ -1,7 +1,5 @@
 const express = require('express');
-const server = require('./src/server');
 const { conn } = require('./src/db.js');
-const { createDriverController, getAllDriversController, getDriverByNameController, getDriverByIdController, searchDriversByTeamController, getAllTeamsController, fetchDataFromLocalhost } = require("./src/Controllers/driverController.js");
 const driverRoutes = require('./src/routes/driverRoute.js');
 
 require('dotenv').config();
@@ -9,21 +7,13 @@ require('dotenv').config();
 const { PORT } = process.env;
 const app = express();
 
-// Middleware para las rutas de los conductores
 app.use(driverRoutes);
 
-// Inicia el servidor proporcionado por Railway
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
-// Inicia un servidor local en el puerto 5000
-const localPort = 3001;
-app.listen(localPort, () => {
-  console.log(`Local server listening on port ${localPort}`);
-});
-
-// Conecta a la base de datos
 conn.sync({ alter: true })
   .then(() => console.log('Database synchronized successfully'))
   .catch((error) => console.error('Error synchronizing database:', error));
+
