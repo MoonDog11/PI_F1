@@ -184,25 +184,21 @@ const getAllTeamsController = async (req, res, next) => {
 };
 
 const getLocalDriversController = async (req, res) => {
-  try {
-    // Aquí puedes escribir el código para recuperar los conductores de la base de datos
-    const drivers = await Driver.findAll(); // Suponiendo que tienes un modelo Driver
+ try {
+    // Configurar Sequelize con la URL de conexión proporcionada por Railway
+    const sequelize = new Sequelize(railwayURL);
+
+    // Realizar consultas a la base de datos utilizando sequelize
+    const drivers = await Driver.findAll();
 
     // Enviar los conductores como respuesta
-    if (res) {
-      res.status(200).json(drivers);
-    } else {
-      console.error("No se proporcionó un objeto de respuesta.");
-    }
+    res.status(200).json(drivers);
   } catch (error) {
-    console.error("Error al obtener los conductores locales:", error);
-    if (res) {
-      res.status(500).json({ error: "Error al obtener los conductores locales" });
-    } else {
-      console.error("No se proporcionó un objeto de respuesta para manejar el error.");
-    }
+    console.error("Error al obtener los conductores desde Railway:", error);
+    res.status(500).json({ error: "Error al obtener los conductores desde Railway" });
   }
 };
+
 module.exports = {
   createDriverController,
   saveDriversToLocalhost,
