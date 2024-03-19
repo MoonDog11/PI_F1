@@ -169,7 +169,7 @@ const getAllTeamsController = async (req, res, next) => {
   }
 };
 
-const railwayURL = 'postgres://user@pif1-production.up.railway.app/Driver';
+const railwayURL = 'https://pif1-production.up.railway.app/drivers';
 
 const getAllDriversFromRailwayController = async (req, res) => {
   try {
