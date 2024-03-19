@@ -32,31 +32,37 @@ const formatDriverData = (driverData) => {
 
 async function saveDriversToLocalhost(req, res, driversData) {
   try {
-    // Verificar si se proporcionaron datos de conductores y si la lista no está vacía
     if (!driversData || driversData.length === 0) {
       console.log("No drivers data provided.");
       return;
     }
 
-    // Los datos de los conductores parecen estar bien, proceder a guardarlos
-    await Driver.bulkCreate(driversData, { ignoreDuplicates: true });
+    // Guardar los datos de los conductores en la base de datos
+    // Código para guardar los datos en la base de datos...
+
+    // Enviar una solicitud POST a la URL especificada
+    const response = await axios.post("https://pif1-production.up.railway.app/drivers/local", driversData);
     
-    // Enviar una respuesta si existe un objeto de respuesta (res)
-    if (res) {
-      res.status(200).send("Drivers saved to localhost successfully");
+    if (response.status === 200) {
+      console.log("Drivers data saved successfully to the specified URL.");
+      if (res) {
+        res.status(200).send("Drivers data saved successfully to the specified URL.");
+      }
     } else {
-      console.log("No response object provided. Unable to send response.");
+      console.log("Error occurred while saving drivers data to the specified URL.");
+      if (res) {
+        res.status(500).send("Error occurred while saving drivers data to the specified URL.");
+      }
     }
   } catch (error) {
-    // Manejar cualquier error que ocurra durante la operación de guardado
-    console.error("Error saving drivers to localhost:", error);
+    console.error("Error saving drivers data to the specified URL:", error);
     if (res) {
-      res.status(500).send("Error saving drivers to localhost");
-    } else {
-      console.log("No response object provided. Unable to send error response.");
+      res.status(500).send("Error saving drivers data to the specified URL.");
     }
   }
 }
+
+
 async function fetchDataFromLocalhost() {
   try {
     const response = await axios.get('http://localhost:5000/drivers');
