@@ -23,8 +23,6 @@ router.get("/drivers/name/:name", getDriverByNameController);
 // Ruta para crear un nuevo conductor
 router.post("/drivers", createDriverController);
 
-// Nueva ruta para guardar los conductores en localhost
-router.post("/drivers/local", saveDriversToLocalhost);
 
 router.get("/drivers/local", getAllDriversFromRailwayController);
 
