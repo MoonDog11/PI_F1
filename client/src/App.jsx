@@ -8,13 +8,15 @@ import DriverDetail from "./Views/Detail/Detail";
 import Landing from "./Views/Landing/Landing";
 import Contact from "./Views/Contact/Contact";
 import './App.css';
+import axios from "axios";
+axios.defaults.baseURL = "https://pif1-production.up.railway.app/"
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} /> {/* Mostrar LandingPage en la ruta por defecto */}
-        <Route path="https://pi-f1.vercel.app/home" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/cards" element={<CardsContainer />} />
         <Route path="/create" element={<DriverForm />} />
         <Route path="/driver/:id" element={<DriverDetail />} />
