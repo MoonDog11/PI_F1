@@ -169,13 +169,23 @@ const getAllTeamsController = async (req, res, next) => {
   }
 };
 
+const railwayURL = 'https://pif1-production.up.railway.app/drivers/local';
+
 const getAllDriversFromRailwayController = async (req, res) => {
   try {
-    // Obtener todos los conductores desde la base de datos Railway
+    // Obtener todos los conductores desde la base de datos
     const drivers = await Driver.findAll();
 
-    // Enviar los conductores como respuesta
-    res.status(200).json(drivers);
+    // Enviar los conductores a la URL de Railway
+    const response = await axios.post(railwayURL, drivers);
+
+    // Verificar el código de estado de la respuesta de Railway
+    if (response.status === 200) {
+      res.status(200).json({ message: "Datos de conductores cargados exitosamente a la URL de Railway" });
+    } else {
+      console.error("Error al cargar datos de conductores a la URL de Railway");
+      res.status(500).json({ error: "Error al cargar datos de conductores a la URL de Railway" });
+    }
   } catch (error) {
     console.error("Error al obtener los conductores desde Railway:", error);
     res.status(500).json({ error: "Error al obtener los conductores desde Railway" });
