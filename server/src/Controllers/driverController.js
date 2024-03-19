@@ -169,14 +169,9 @@ const getAllTeamsController = async (req, res, next) => {
   }
 };
 
-const railwayURL = 'https://pif1-production.up.railway.app/drivers';
-
 const getAllDriversFromRailwayController = async (req, res) => {
   try {
-    // Configurar Sequelize con la URL de conexión proporcionada por Railway
-    const sequelize = new Sequelize(railwayURL);
-
-    // Realizar consultas a la base de datos utilizando sequelize
+    // Obtener todos los conductores desde la base de datos Railway
     const drivers = await Driver.findAll();
 
     // Enviar los conductores como respuesta
