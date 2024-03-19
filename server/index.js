@@ -1,7 +1,7 @@
 const express = require('express');
 const server = require('./src/server');
 const { conn } = require('./src/db.js');
-const { getLocalDriversController, createDriverController, saveDriversToLocalhost, getAllDriversController, getDriverByNameController, getDriverByIdController, searchDriversByTeamController, getAllTeamsController, fetchDataFromLocalhost } = require("./src/Controllers/driverController.js");
+const { createDriverController, getAllDriversController, getDriverByNameController, getDriverByIdController, searchDriversByTeamController, getAllTeamsController, fetchDataFromLocalhost } = require("./src/Controllers/driverController.js");
 const driverRoutes = require('./src/routes/driverRoute.js');
 
 require('dotenv').config();
@@ -15,8 +15,6 @@ app.use(driverRoutes);
 // Inicia el servidor proporcionado por Railway
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-  saveDriversToLocalhost();
-  getLocalDriversController();
 });
 
 // Inicia un servidor local en el puerto 5000
