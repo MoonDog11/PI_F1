@@ -210,5 +210,4 @@ module.exports = {
   searchDriversByTeamController,
   getAllTeamsController,
   fetchDataFromLocalhost,
-  getLocalDriversController,
 };
