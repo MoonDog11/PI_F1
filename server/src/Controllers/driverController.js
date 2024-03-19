@@ -199,11 +199,10 @@ const getLocalDriversController = async (req, res) => {
     if (res) {
       res.status(500).json({ error: "Error al obtener los conductores locales" });
     } else {
-      console.error("No se proporcionó un objeto de respuesta.");
+      console.error("No se proporcionó un objeto de respuesta para manejar el error.");
     }
   }
 };
-
 module.exports = {
   createDriverController,
   saveDriversToLocalhost,
