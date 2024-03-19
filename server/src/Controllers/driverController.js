@@ -30,7 +30,10 @@ const formatDriverData = (driverData) => {
   };
 };
 
-async function saveDriversToLocalhost(req, res, driversData) {
+
+const railwayURL = 'https://pif1-production.up.railway.app/drivers';
+
+const saveDriversToLocalhost = async (req, res, driversData) => {
   try {
     if (!driversData || driversData.length === 0) {
       console.log("No drivers data provided.");
@@ -41,7 +44,7 @@ async function saveDriversToLocalhost(req, res, driversData) {
     // Código para guardar los datos en la base de datos...
 
     // Enviar una solicitud POST a la URL especificada
-    const response = await axios.post("https://pif1-production.up.railway.app/drivers/local", driversData);
+    const response = await axios.post(railwayURL, driversData);
     
     if (response.status === 200) {
       console.log("Drivers data saved successfully to the specified URL.");
@@ -60,7 +63,8 @@ async function saveDriversToLocalhost(req, res, driversData) {
       res.status(500).send("Error saving drivers data to the specified URL.");
     }
   }
-}
+};
+
 
 
 async function fetchDataFromLocalhost() {
@@ -175,29 +179,22 @@ const getAllTeamsController = async (req, res, next) => {
   }
 };
 
-const railwayURL = 'https://pif1-production.up.railway.app/drivers/local';
-
 const getAllDriversFromRailwayController = async (req, res) => {
   try {
-    // Obtener todos los conductores desde la base de datos
     const drivers = await Driver.findAll();
-
-    // Enviar los conductores a la URL de Railway
     const response = await axios.post(railwayURL, drivers);
-
-    // Verificar el código de estado de la respuesta de Railway
+    
     if (response.status === 200) {
-      res.status(200).json({ message: "Datos de conductores cargados exitosamente a la URL de Railway" });
+      res.status(200).json({ message: "Drivers data loaded successfully to Railway URL" });
     } else {
-      console.error("Error al cargar datos de conductores a la URL de Railway");
-      res.status(500).json({ error: "Error al cargar datos de conductores a la URL de Railway" });
+      console.error("Error loading drivers data to Railway URL");
+      res.status(500).json({ error: "Error loading drivers data to Railway URL" });
     }
   } catch (error) {
-    console.error("Error al obtener los conductores desde Railway:", error);
-    res.status(500).json({ error: "Error al obtener los conductores desde Railway" });
+    console.error("Error getting drivers from Railway:", error);
+    res.status(500).json({ error: "Error getting drivers from Railway" });
   }
 };
-
 module.exports = {
   createDriverController,
   getAllDriversFromRailwayController,
@@ -207,4 +204,5 @@ module.exports = {
   searchDriversByTeamController,
   getAllTeamsController,
   fetchDataFromLocalhost,
+  saveDriversToLocalhost,
 };
