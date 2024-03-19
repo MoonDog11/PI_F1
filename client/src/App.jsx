@@ -14,7 +14,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} /> {/* Mostrar LandingPage en la ruta por defecto */}
-        <Route path="/home" element={<Home />} />
+        <Route path="https://pi-f1.vercel.app/home" element={<Home />} />
         <Route path="/cards" element={<CardsContainer />} />
         <Route path="/create" element={<DriverForm />} />
         <Route path="/driver/:id" element={<DriverDetail />} />
