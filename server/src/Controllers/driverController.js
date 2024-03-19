@@ -185,17 +185,21 @@ const getAllTeamsController = async (req, res, next) => {
 
 const getLocalDriversController = async (req, res) => {
   try {
-    if (!res) {
-      console.error("No se proporcionó un objeto de respuesta.");
-      return;
-    }
+    // Aquí puedes escribir el código para recuperar los conductores de la base de datos
+    const drivers = await Driver.findAll(); // Suponiendo que tienes un modelo Driver
 
-    const drivers = await Driver.findAll();
-    res.status(200).json(drivers);
+    // Enviar los conductores como respuesta
+    if (res) {
+      res.status(200).json(drivers);
+    } else {
+      console.error("No se proporcionó un objeto de respuesta.");
+    }
   } catch (error) {
     console.error("Error al obtener los conductores locales:", error);
     if (res) {
       res.status(500).json({ error: "Error al obtener los conductores locales" });
+    } else {
+      console.error("No se proporcionó un objeto de respuesta.");
     }
   }
 };
