@@ -183,8 +183,10 @@ const getAllTeamsController = async (req, res, next) => {
   }
 };
 
-const getLocalDriversController = async (req, res) => {
- try {
+const railwayURL = 'postgres://user@pif1-production.up.railway.app/Driver';
+
+const getAllDriversFromRailwayController = async (req, res) => {
+  try {
     // Configurar Sequelize con la URL de conexión proporcionada por Railway
     const sequelize = new Sequelize(railwayURL);
 
@@ -201,7 +203,7 @@ const getLocalDriversController = async (req, res) => {
 
 module.exports = {
   createDriverController,
-  saveDriversToLocalhost,
+  getAllDriversFromRailwayController,
   getAllDriversController,
   getDriverByNameController,
   getDriverByIdController,
