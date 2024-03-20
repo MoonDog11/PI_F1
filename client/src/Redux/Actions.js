@@ -123,7 +123,7 @@ export const searchDriverByName = (name) => {
   return async (dispatch) => {
     try {
       // Primero, intentamos buscar por nombre
-      let url = `http://localhost:5000/drivers?name.forename=${encodeURIComponent(
+      let url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
         name
       )}`;
       let response = await axios.get(url);
@@ -131,7 +131,7 @@ export const searchDriverByName = (name) => {
 
       // Si no encontramos resultados por nombre, intentamos buscar por apellido
       if (data.length === 0) {
-        url = `http://localhost:5000/drivers?name.surname=${encodeURIComponent(
+        url = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
           name
         )}`;
         response = await axios.get(url);
@@ -154,7 +154,7 @@ export const createDriver = (driverData) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/drivers",
+        "https://pif1-production.up.railway.app/drivers",
         driverData
       );
       console.log("API Response for createDriver action:", response.data);
@@ -210,7 +210,7 @@ export const getDriverByIdFailure = (error) => {
 export const getDriverById = (id) => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`http://localhost:5000/drivers/${id}`);
+      const response = await axios.get(`https://pif1-production.up.railway.app/drivers/${id}`);
       const driver = response.data;
 
       dispatch(getDriverByIdSuccess(driver));
