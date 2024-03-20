@@ -123,13 +123,17 @@ export const searchDriverByName = (name) => {
   return async (dispatch) => {
     try {
       // Primero, intentamos buscar por nombre
-      let url = `https://pif1-production.up.railway.app/drivers/name/${encodeURIComponent(name)}`;
+      let url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
+        name
+      )}`;
       let response = await axios.get(url);
       let data = response.data;
 
       // Si no encontramos resultados por nombre, intentamos buscar por apellido
       if (data.length === 0) {
-        url = `https://pif1-production.up.railway.app/drivers/name/${encodeURIComponent(name)}`;
+        url = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
+          name
+        )}`;
         response = await axios.get(url);
         data = response.data;
       }
