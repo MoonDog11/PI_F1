@@ -158,7 +158,7 @@ const searchDriversByTeamController = async (req, res) => {
   const { team } = req.query;
 
   try {
-    const response = await axios.get(`http://localhost:5000/drivers?team=${team}`);
+    const response = await axios.get(`https://pif1-production.up.railway.app/drivers?team=${team}`);
     const drivers = response.data;
 
     const handledDrivers = await searchDriversByTeamHandler(team);
