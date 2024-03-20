@@ -15,6 +15,11 @@ server.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+// Middleware para manejar opciones preflight
+server.options('*', (req, res) => {
+  res.sendStatus(200);
+});
+
 server.use(router);
 
 module.exports = server;
