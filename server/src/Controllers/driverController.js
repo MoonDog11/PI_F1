@@ -88,24 +88,34 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
-  const { name } = req.params; // Obteniendo el parámetro :name de la URL
+  const { name } = req.query;
 
   try {
-    // Realiza la búsqueda del conductor por nombre en la base de datos
-    const driver = await Driver.findOne({ where: { name } });
+    console.log("Searching for driver with name:", name);
+    const drivers = await getDriverByNameHandler(name);
 
-    // Verifica si se encontró el conductor
-    if (driver) {
-      // Si se encontró, envía una respuesta con el conductor encontrado
-      res.status(200).json(driver);
+    if (drivers.length > 0) {
+      console.log("Found drivers:", drivers);
+      res.json(drivers);
     } else {
-      // Si no se encontró, envía una respuesta de error con un mensaje adecuado
-      res.status(404).json({ error: "Conductor no encontrado" });
+      // Intenta buscar de nuevo convirtiendo el nombre a minúsculas
+      const lowercaseName = name.toLowerCase();
+      const lowercaseDrivers = await getDriverByNameHandler(lowercaseName);
+
+      if (lowercaseDrivers.length > 0) {
+        console.log(
+          "Found drivers (case-insensitive search):",
+          lowercaseDrivers
+        );
+        res.json(lowercaseDrivers);
+      } else {
+        console.log("Driver not found");
+        res.status(404).send("Conductor no encontrado");
+      }
     }
   } catch (error) {
-    // Maneja cualquier error que ocurra durante la búsqueda o el procesamiento
-    console.error("Error al obtener el conductor por nombre:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    console.error("Error al obtener conductores por nombre:", error);
+    res.status(500).send("Error al obtener conductores por nombre");
   }
 };
 
