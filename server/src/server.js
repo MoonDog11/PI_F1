@@ -8,16 +8,12 @@ const server = express();
 server.use(morgan("dev"));
 server.use(express.json());
 
+// Configurar CORS
 server.use(cors({
-  origin: "https://pi-f1.vercel.app"
+  origin: "https://pi-f1.vercel.app", // Cambia esto por el dominio correcto
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
-server.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://pi-f1.vercel.app");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
 
 server.use(router);
 
