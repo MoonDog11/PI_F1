@@ -88,7 +88,7 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
-  const { name } = req.query;
+  const { name } = req.params; // Utiliza req.params en lugar de req.query
 
   try {
     console.log("Searching for driver with name:", name);
