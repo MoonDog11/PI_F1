@@ -88,24 +88,24 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
-  const { name } = req.params; // Utiliza req.params en lugar de req.query
+  const { name } = req.params; // Obteniendo el parámetro :name de la URL
 
   try {
-    console.log("Searching for driver with name:", name);
-    // Realizar una solicitud HTTP a la URL en Railway
-    const response = await axios.get(`https://pif1-production.up.railway.app/drivers?name=${encodeURIComponent(name)}`);
-    const drivers = response.data;
+    // Realiza la búsqueda del conductor por nombre en la base de datos
+    const driver = await Driver.findOne({ where: { name } });
 
-    if (drivers.length > 0) {
-      console.log("Found drivers:", drivers);
-      res.json(drivers);
+    // Verifica si se encontró el conductor
+    if (driver) {
+      // Si se encontró, envía una respuesta con el conductor encontrado
+      res.status(200).json(driver);
     } else {
-      console.log("Driver not found");
-      res.status(404).send("Conductor no encontrado");
+      // Si no se encontró, envía una respuesta de error con un mensaje adecuado
+      res.status(404).json({ error: "Conductor no encontrado" });
     }
   } catch (error) {
-    console.error("Error al obtener conductores por nombre:", error);
-    res.status(500).send("Error al obtener conductores por nombre");
+    // Maneja cualquier error que ocurra durante la búsqueda o el procesamiento
+    console.error("Error al obtener el conductor por nombre:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
