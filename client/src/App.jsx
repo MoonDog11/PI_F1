@@ -9,7 +9,7 @@ import Landing from "./Views/Landing/Landing";
 import Contact from "./Views/Contact/Contact";
 import './App.css';
 import axios from "axios";
-axios.defaults.baseURL = "https://pif1-production.up.railway.app"
+axios.defaults.baseURL = "/api";
 
 const App = () => {
   return (
