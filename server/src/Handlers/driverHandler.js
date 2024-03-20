@@ -42,18 +42,26 @@ const getDriverByNameHandler = async (name) => {
     // Convertir el nombre a minúsculas antes de la búsqueda
     const lowercaseName = name.toLowerCase();
 
-    // Buscar conductores cuyo nombre o apellido coincida con la consulta
-    const drivers = await Driver.findAll({
-      where: {
-        [Op.or]: [
-          { 'name.forename': { [Op.like]: `%${lowercaseName}%` } },
-          { 'name.surname': { [Op.like]: `%${lowercaseName}%` } }
-        ]
-      },
-      include: Team
-    });
+    // Verificar si el parámetro parece ser solo un apellido
+    const isSurname = name.includes(".");
 
-    return drivers;
+    // Construir la parte de la URL según si es un apellido o un nombre
+    let url;
+    if (isSurname) {
+      url = `https://pif1-production.up.railway.app/drivers?name.surname=${lowercaseName}`;
+    } else {
+      url = `https://pif1-production.up.railway.app/drivers?name.forename=${lowercaseName}`;
+    }
+
+    console.log("API URL:", url);
+
+    // Realizar la solicitud a la API
+    const response = await fetch(url);
+    const data = await response.json();
+
+    console.log("API Response inside action:", data);
+
+    return data;
   } catch (error) {
     console.error("Error al buscar conductores por nombre:", error);
     throw error;
