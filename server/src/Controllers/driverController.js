@@ -92,7 +92,9 @@ const getDriverByNameController = async (req, res) => {
 
   try {
     console.log("Searching for driver with name:", name);
-    const drivers = await getDriverByNameHandler(name);
+    // Realizar una solicitud HTTP a la URL en Railway
+    const response = await axios.get(`https://pif1-production.up.railway.app/drivers?name=${encodeURIComponent(name)}`);
+    const drivers = response.data;
 
     if (drivers.length > 0) {
       console.log("Found drivers:", drivers);
