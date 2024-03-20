@@ -11,7 +11,7 @@ server.use(express.json());
 // Configurar CORS
 server.use(cors({
   origin: "https://pi-f1.vercel.app",
-  methods: ["GET", "POST", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
