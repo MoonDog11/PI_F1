@@ -132,17 +132,20 @@ export const searchDriverByName = (name) => {
     dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
 
     try {
+      console.log('Search query:', name); // Log de la consulta de búsqueda
+
       // Realiza la solicitud para buscar conductores por nombre
       const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`;
+      console.log('Request URL:', url); // Log de la URL de la solicitud
       const response = await axios.get(url);
 
       // Verificar si la respuesta es válida y contiene datos
       if (response && response.data && Array.isArray(response.data)) {
         const data = response.data;
+        console.log('Drivers found:', data); // Log de los conductores encontrados
 
         // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
         if (data.length > 0) {
-          console.log("Conductores encontrados por nombre:", data); // Nuevo log agregado
           dispatch(fetchDriversSuccess(data));
           return; // Salir de la función después de despachar la acción exitosa
         }
@@ -150,29 +153,31 @@ export const searchDriverByName = (name) => {
 
       // Si no se encontraron conductores por nombre, intenta buscar por apellido
       const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(name)}`;
+      console.log('Request URL (Surname):', surnameUrl); // Log de la URL de la solicitud por apellido
       const surnameResponse = await axios.get(surnameUrl);
 
       // Verificar si la respuesta es válida y contiene datos
       if (surnameResponse && surnameResponse.data && Array.isArray(surnameResponse.data)) {
         const surnameData = surnameResponse.data;
+        console.log('Drivers found (Surname):', surnameData); // Log de los conductores encontrados por apellido
 
         // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
         if (surnameData.length > 0) {
-          console.log("Conductores encontrados por apellido:", surnameData); // Nuevo log agregado
           dispatch(fetchDriversSuccess(surnameData));
           return; // Salir de la función después de despachar la acción exitosa
         }
       }
 
       // Si no se encontraron conductores, dispara la acción para indicar que la búsqueda ha fallado
+      console.log('No drivers found for query:', name); // Log de la falta de conductores encontrados
       dispatch(fetchDriversFailure('No se encontraron conductores'));
     } catch (error) {
       // Si ocurre un error durante la búsqueda, dispara la acción para indicar que la búsqueda ha fallado
+      console.error('Error during search:', error); // Log del error
       dispatch(fetchDriversFailure(error.message));
     }
   };
 };
-
 export const createDriverRequest = () => {
   return {
     type: CREATE_DRIVER_REQUEST,
