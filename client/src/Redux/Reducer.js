@@ -15,7 +15,8 @@ import {
   SEARCH_DRIVER_BY_TEAM_SUCCESS,
   SEARCH_DRIVER_BY_TEAM_FAILURE,
   RESET_DRIVERS,
-  // Agrega las nuevas acciones aquí según sea necesario
+  SEARCH_DRIVER_BY_NAME_SUCCESS,
+  SEARCH_DRIVER_BY_NAME_FAILURE,
 } from "./Actions";
 
 const initialState = {
@@ -26,9 +27,10 @@ const initialState = {
   loading: false,
   error: null,
   searchError: null,
-  searchedDriver: [],
   selectedDriver: null,
   sortDrivers: false,
+  // Sección aparte para el conductor buscado por nombre
+  searchedDriver: null,
 };
 
 const driverReducer = (state = initialState, action) => {
@@ -59,7 +61,7 @@ const driverReducer = (state = initialState, action) => {
         teams: teams,
         teamNames: teamNames,
         newDriver: action.payload,
-        searchedDriver: action.payload.drivers, // Asegura que los conductores buscados estén actualizados
+        searchedDriver: null, // Reiniciar searchedDriver
       };
 
     case CREATE_DRIVER_SUCCESS:
@@ -111,31 +113,24 @@ const driverReducer = (state = initialState, action) => {
         selectedDriver: action.payload,
       };
 
-    case SET_LOADING: // Agrega el nuevo caso
+    case SET_LOADING:
       return {
         ...state,
         loading: action.payload,
       };
-
-    // Otros casos según sea necesario
-    case "FETCH_DRIVERS":
-      // Reducer para FETCH_DRIVERS (tu lógica actual)
-      return { ...state, searchedDriver: action.payload };
-
-    case "SET_LOADING":
-      // Reducer para SET_LOADING (tu lógica actual)
-      return { ...state, loading: action.payload };
 
     case TOGGLE_SORT_ORDER:
       return {
         ...state,
         sortDrivers: !state.sortDrivers,
       };
+
     case SEARCH_DRIVER_BY_TEAM_REQUEST:
       return {
         ...state,
         error: null,
       };
+
     case SEARCH_DRIVER_BY_TEAM_SUCCESS:
       const { team, drivers } = action.payload;
       console.log(`Successfully fetched drivers for team: ${team}`);
@@ -160,6 +155,25 @@ const driverReducer = (state = initialState, action) => {
         ...state,
         drivers: initialState.drivers,
         searchedDriver: initialState.searchedDriver,
+      };
+
+    // Agrega los casos para el conductor buscado por nombre
+    case SEARCH_DRIVER_BY_NAME_SUCCESS:
+      console.log("Successfully fetched driver by name:", action.payload);
+      return {
+        ...state,
+        searchedDriver: action.payload,
+        loading: false,
+        error: null,
+      };
+
+    case SEARCH_DRIVER_BY_NAME_FAILURE:
+      console.error("Failed to fetch driver by name. Error:", action.payload);
+      return {
+        ...state,
+        searchedDriver: null,
+        loading: false,
+        error: action.payload,
       };
 
     default:
