@@ -10,7 +10,7 @@ const {
 const router = Router();
 
 router.get("/drivers", getAllDriversController);
-router.get("/drivers/name/:name", getDriverByNameController); // Ruta para búsqueda por nombre
+router.get("/drivers/search/:name", getDriverByNameController);
 router.get("/drivers/:idDriver", getDriverByIdController);
 router.get("/drivers/local", getAllDriversFromRailwayController);
 router.post("/drivers", createDriverController);
