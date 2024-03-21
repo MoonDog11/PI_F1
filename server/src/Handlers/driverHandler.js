@@ -43,7 +43,7 @@ const getDriverByNameHandler = async (name) => {
     const lowercaseName = name.toLowerCase();
 
     // Verificar si el parámetro parece ser solo un apellido
-    const isSurname = lowercaseName.includes(".");
+    const isSurname = name.includes(".");
 
     // Construir la parte de la URL según si es un apellido o un nombre
     let url;
@@ -59,7 +59,7 @@ const getDriverByNameHandler = async (name) => {
     const response = await fetch(url);
     const data = await response.json();
 
-    console.log("API Response inside handler:", data);
+    console.log("API Response inside action:", data);
 
     return data;
   } catch (error) {
