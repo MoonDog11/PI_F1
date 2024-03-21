@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const {
   getAllDriversController,
-  getDriverByNameController, // Cambiado de /drivers/:name a /drivers/name/:name
+  getDriverByNameController, 
   getDriverByIdController,
   createDriverController,
   getAllDriversFromRailwayController,
