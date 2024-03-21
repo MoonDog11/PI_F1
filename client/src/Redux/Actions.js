@@ -27,6 +27,13 @@ export const SEARCH_DRIVER_BY_TEAM_SUCCESS = "SEARCH_DRIVER_BY_TEAM_SUCCESS";
 export const SEARCH_DRIVER_BY_TEAM_FAILURE = "SEARCH_DRIVER_BY_TEAM_FAILURE";
 export const RESET_DRIVERS = "RESET_DRIVERS";
 
+
+export const fetchDriversRequest = () => {
+  return {
+    type: FETCH_DRIVERS_REQUEST,
+  };
+};
+
 export const setLoading = (isLoading) => {
   return {
     type: SET_LOADING,
