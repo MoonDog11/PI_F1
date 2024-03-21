@@ -122,6 +122,11 @@ export const fetchDrivers = () => {
   };
 };
 
+export const fetchDriversRequest = () => ({
+  type: FETCH_DRIVERS_REQUEST,
+});
+
+
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
     dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
