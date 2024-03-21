@@ -127,24 +127,16 @@ export const fetchDrivers = () => {
     }
   };
 };
+
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
     try {
-      // Primero, intentamos buscar por nombre
-      let url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
-        name
-      )}`;
-      let response = await axios.get(url);
-      let data = response.data;
-
-      // Si no encontramos resultados por nombre, intentamos buscar por apellido
-      if (data.length === 0) {
-        url = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
-          name
-        )}`;
-        response = await axios.get(url);
-        data = response.data;
-      }
+      // Construir la URL utilizando la nueva ruta de búsqueda por nombre
+      const url = `https://pif1-production.up.railway.app/drivers/search/${encodeURIComponent(name)}`;
+      
+      // Realizar la solicitud a la API
+      const response = await axios.get(url);
+      const data = response.data;
 
       dispatch(fetchDriversSuccess(data));
 
@@ -155,7 +147,6 @@ export const searchDriverByName = (name) => {
     }
   };
 };
-
 
 export const createDriver = (driverData) => {
   return async (dispatch) => {
