@@ -8,7 +8,7 @@ const onPageChange = (currentPage) => {
 };
 
 // Action Types
-export const FETCH_DRIVERS_REQUEST = "FETCH_DRIVERS_REQUEST";
+
 export const FETCH_DRIVERS_SUCCESS = "FETCH_DRIVERS_SUCCESS";
 export const FETCH_DRIVERS_FAILURE = "FETCH_DRIVERS_FAILURE";
 
