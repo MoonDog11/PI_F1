@@ -13,23 +13,23 @@ const SearchBar = () => {
     setSearchQuery(event.target.value);
   };
 
-  const handleSearch = async (e) => {
-    if (e) {
-      e.preventDefault(); 
-    }
+ const handleSearch = async (e) => {
+  if (e) {
+    e.preventDefault(); 
+  }
 
-    console.log('Search query:', searchQuery);
+  console.log('Search query:', searchQuery);
 
-    try {
-      // Realiza la búsqueda y obtén los resultados
-      const results = await dispatch(searchDriverByName(searchQuery));
-      console.log('Search results:', results);
-      // Actualiza el estado searchResults con los resultados de la búsqueda
-      setSearchResults(results);
-    } catch (error) {
-      console.error('Error en la búsqueda:', error);
-    }
-  };
+  try {
+    // Realiza la búsqueda y obtén los resultados
+    const results = await dispatch(searchDriverByName(searchQuery));
+    console.log('Search results:', results);
+    // Actualiza el estado searchResults con los resultados de la búsqueda
+    setSearchResults(results);
+  } catch (error) {
+    console.error('Error en la búsqueda:', error);
+  }
+};
 
   const handleKeypress = async (event) => {
     if (event.key === 'Enter') {
