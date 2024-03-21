@@ -138,6 +138,8 @@ export const searchDriverByName = (name) => {
         data = response.data;
       }
 
+       console.log("Datos cargados correctamente:", data);
+
       dispatch(fetchDriversSuccess(data));
 
       return data;
