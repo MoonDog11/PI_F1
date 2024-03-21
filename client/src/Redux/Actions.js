@@ -129,41 +129,33 @@ export const fetchDrivers = () => {
 };
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
-    dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
-
     try {
-      // Realiza la solicitud para buscar conductores por nombre
-      const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
+      // Primero, intentamos buscar por nombre
+      let url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
         name
       )}`;
-      const response = await axios.get(url);
-      const data = response.data;
+      let response = await axios.get(url);
+      let data = response.data;
 
-      // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
-      if (data.length > 0) {
-        dispatch(fetchDriversSuccess(data));
-      } else {
-        // Si no se encuentran conductores por nombre, intenta buscar por apellido
-        const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
+      // Si no encontramos resultados por nombre, intentamos buscar por apellido
+      if (data.length === 0) {
+        url = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
           name
         )}`;
-        const surnameResponse = await axios.get(surnameUrl);
-        const surnameData = surnameResponse.data;
-
-        // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
-        if (surnameData.length > 0) {
-          dispatch(fetchDriversSuccess(surnameData));
-        } else {
-          // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
-          dispatch(fetchDriversFailure("No se encontraron conductores"));
-        }
+        response = await axios.get(url);
+        data = response.data;
       }
+
+      dispatch(fetchDriversSuccess(data));
+
+      return data;
     } catch (error) {
-      // Si ocurre un error durante la búsqueda, dispara la acción para indicar que la búsqueda ha fallado
       dispatch(fetchDriversFailure(error.message));
+      throw error;
     }
   };
 };
+
 
 export const createDriver = (driverData) => {
   return async (dispatch) => {
