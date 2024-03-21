@@ -129,7 +129,7 @@ export const fetchDriversRequest = () => ({
 
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
-    dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
+    dispatch(setLoading(true)); // Actualización: Llamada a setLoading en lugar de fetchDriversRequest
 
     try {
       // Realiza la solicitud para buscar conductores por nombre
@@ -157,6 +157,8 @@ export const searchDriverByName = (name) => {
     } catch (error) {
       // Si ocurre un error durante la búsqueda, dispara la acción para indicar que la búsqueda ha fallado
       dispatch(fetchDriversFailure(error.message));
+    } finally {
+      dispatch(setLoading(false)); // Actualización: Llamada a setLoading para indicar que la solicitud ha finalizado
     }
   };
 };
