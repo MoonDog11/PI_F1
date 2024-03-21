@@ -11,7 +11,9 @@ const onPageChange = (currentPage) => {
 export const FETCH_DRIVERS_REQUEST = "FETCH_DRIVERS_REQUEST";
 export const FETCH_DRIVERS_SUCCESS = "FETCH_DRIVERS_SUCCESS";
 export const FETCH_DRIVERS_FAILURE = "FETCH_DRIVERS_FAILURE";
-
+export const SEARCH_DRIVER_BY_NAME_REQUEST = "SEARCH_DRIVER_BY_NAME_REQUEST";
+export const SEARCH_DRIVER_BY_NAME_SUCCESS = "SEARCH_DRIVER_BY_NAME_SUCCESS";
+export const SEARCH_DRIVER_BY_NAME_FAILURE = "SEARCH_DRIVER_BY_NAME_FAILURE";
 export const CREATE_DRIVER_REQUEST = "CREATE_DRIVER_REQUEST";
 export const CREATE_DRIVER_SUCCESS = "CREATE_DRIVER_SUCCESS";
 export const CREATE_DRIVER_FAILURE = "CREATE_DRIVER_FAILURE";
@@ -124,18 +126,21 @@ export const fetchDrivers = () => {
 
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
-    // Realizar la solicitud para buscar conductores por nombre
-    const response = await axios.get(
-      `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`
-    );
+    dispatch(searchDriverByNameRequest());
 
-    const data = response.data;
+    try {
+      const response = await axios.get(
+        `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`
+      );
+      const data = response.data;
 
-    // Si se encontraron conductores, retornar los resultados
-    if (Array.isArray(data) && data.length > 0) {
-      return data; // Devolver los resultados de la búsqueda
-    } else {
-      throw new Error("No se encontraron conductores con ese nombre");
+      if (Array.isArray(data) && data.length > 0) {
+        dispatch(searchDriverByNameSuccess(data[0])); // Solo se devuelve el primer conductor encontrado
+      } else {
+        throw new Error("No se encontraron conductores con ese nombre");
+      }
+    } catch (error) {
+      dispatch(searchDriverByNameFailure(error.message));
     }
   };
 };
@@ -160,6 +165,20 @@ export const createDriver = (driverData) => {
     }
   };
 };
+
+export const searchDriverByNameRequest = () => ({
+  type: SEARCH_DRIVER_BY_NAME_REQUEST
+});
+
+export const searchDriverByNameSuccess = (driver) => ({
+  type: SEARCH_DRIVER_BY_NAME_SUCCESS,
+  payload: driver
+});
+
+export const searchDriverByNameFailure = (error) => ({
+  type: SEARCH_DRIVER_BY_NAME_FAILURE,
+  payload: error
+});
 
 export const createDriverRequest = () => {
   return {
