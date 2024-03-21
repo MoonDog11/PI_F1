@@ -124,33 +124,33 @@ export const fetchDrivers = () => {
 
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
-    dispatch(setLoading(true)); // Indicar que se está realizando la búsqueda
-
     try {
-      // Realizar la solicitud para buscar un conductor por nombre
-      const response = await axios.get(
-        `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`
-      );
+      // Primero, intentamos buscar por nombre
+      let url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
+        name
+      )}`;
+      let response = await axios.get(url);
+      let data = response.data;
 
-      const data = response.data;
-
-      // Verificar si se encontró un conductor
-      if (Array.isArray(data) && data.length > 0) {
-        // Si se encontró al menos un conductor, obtener el primer conductor encontrado y despatchear la acción de éxito
-        const driver = data[0]; // Obtener el primer conductor encontrado
-        dispatch(fetchDriversSuccess([driver])); // Pasar un array con el conductor encontrado para mantener coherencia con el formato esperado por fetchDriversSuccess
-      } else {
-        // Si no se encuentra ningún conductor, despatchear la acción de fallo con un mensaje adecuado
-        dispatch(fetchDriversFailure("No se encontró ningún conductor con ese nombre"));
+      // Si no encontramos resultados por nombre, intentamos buscar por apellido
+      if (data.length === 0) {
+        url = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
+          name
+        )}`;
+        response = await axios.get(url);
+        data = response.data;
       }
+
+      dispatch(fetchDriversSuccess(data));
+
+      return data;
     } catch (error) {
-      // Si ocurre un error durante la búsqueda, despatchear la acción de fallo con el mensaje de error
       dispatch(fetchDriversFailure(error.message));
-    } finally {
-      dispatch(setLoading(false)); // Indicar que la búsqueda ha finalizado, independientemente del resultado
+      throw error;
     }
   };
 };
+
 
 export const createDriver = (driverData) => {
   return async (dispatch) => {
