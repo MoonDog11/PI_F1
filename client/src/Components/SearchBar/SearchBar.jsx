@@ -1,3 +1,4 @@
+// SearchBar.jsx
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { searchDriverByName } from '../../Redux/Actions';
@@ -17,11 +18,8 @@ const SearchBar = () => {
       e.preventDefault(); 
     }
 
-    console.log('Search query:', searchQuery);
-
     try {
       const results = await dispatch(searchDriverByName(searchQuery));
-      console.log('Search results:', results);
       setSearchResults(results);
     } catch (error) {
       console.error('Error en la búsqueda:', error);
@@ -31,7 +29,7 @@ const SearchBar = () => {
   const handleKeypress = async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleSearch(event); // Corrección: pasa el evento como argumento
+      handleSearch(event); 
     }
   };
 
@@ -54,18 +52,7 @@ const SearchBar = () => {
         </div>
       </form>
 
-      {searchResults.length > 0 && (
-        <div>
-          <h2>Go!</h2>
-          <ul>
-            {searchResults.map((driver) => (
-              <li key={driver.id}>
-                {driver.name.forename} {driver.name.surname}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {/* No se muestra la lista de resultados en este componente */}
     </div>
   );
 };
