@@ -30,7 +30,7 @@ const SearchBar = ({ setSearchResults }) => {
   const handleKeypress = async (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleSearch();
+      handleSearch(event);
     }
   };
 
