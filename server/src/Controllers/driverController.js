@@ -98,27 +98,14 @@ const getDriverByNameController = async (req, res) => {
       console.log("Found drivers:", drivers);
       res.json(drivers);
     } else {
-      // Intenta buscar de nuevo convirtiendo el nombre a minúsculas
-      const lowercaseName = name.toLowerCase();
-      const lowercaseDrivers = await getDriverByNameHandler(lowercaseName);
-
-      if (lowercaseDrivers.length > 0) {
-        console.log(
-          "Found drivers (case-insensitive search):",
-          lowercaseDrivers
-        );
-        res.json(lowercaseDrivers);
-      } else {
-        console.log("Driver not found");
-        res.status(404).send("Conductor no encontrado");
-      }
+      console.log("Driver not found");
+      res.status(404).send("Conductor no encontrado");
     }
   } catch (error) {
     console.error("Error al obtener conductores por nombre:", error);
     res.status(500).send("Error al obtener conductores por nombre");
   }
 };
-
 
 const createDriverController = async (req, res) => {
   const { name, teams } = req.body;
