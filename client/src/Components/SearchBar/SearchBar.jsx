@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { searchDriverByName } from '../../Redux/Actions'; // Asegúrate de que la ruta sea correcta
 import './SearchBar.css';
+import Card from '../Card/Card'; 
 
 const SearchBar = () => {
   const dispatch = useDispatch();
@@ -56,17 +57,15 @@ const SearchBar = () => {
         </div>
       </form>
 
-      {/* Muestra los resultados en la interfaz de usuario */}
+     {/* Muestra las tarjetas de los conductores en la interfaz de usuario */}
       {searchResults.length > 0 && (
         <div>
-          <h2>Go!</h2>
-          <ul>
-            {searchResults.map((driver) => (
-              <li key={driver.id}>
-                {driver.name.forename} {driver.name.surname}
-              </li>
+          <h2>Search Results</h2>
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            {searchResults.map(driver => (
+              <Card key={driver.id} driver={driver} />
             ))}
-          </ul>
+          </div>
         </div>
       )}
     </div>
