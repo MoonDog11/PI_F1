@@ -174,7 +174,41 @@ const getAllDriversFromRailwayController = async (req, res) => {
   }
 };
 
+const createDriverController = async (req, res) => {
+  const { name, teams } = req.body;
+
+  // Verifica si se proporcionaron los datos necesarios
+  if (!name || !teams || teams.length === 0) {
+    return res
+      .status(400)
+      .json({ error: "Nombre y al menos un equipo son obligatorios." });
+  }
+
+  try {
+    // Crea el nuevo conductor en la base de datos
+    const newDriver = await Driver.create({ name });
+
+    // Relaciona el conductor con los equipos indicados
+    await newDriver.addTeams(teams);
+
+    // Recarga el conductor con los equipos relacionados
+    const driverWithTeams = await Driver.findByPk(newDriver.id, {
+      include: Team,
+    });
+
+    // Envía una respuesta exitosa con el conductor y los equipos relacionados
+    res.status(201).json({
+      message: "Conductor creado exitosamente",
+      driver: driverWithTeams,
+    });
+  } catch (error) {
+    console.error("Error al crear el conductor:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
 module.exports = {
+  createDriverController,
   getAllDriversFromRailwayController,
   getAllDriversController,
   getDriverByNameController,
