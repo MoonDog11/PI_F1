@@ -28,11 +28,6 @@ export const SEARCH_DRIVER_BY_TEAM_FAILURE = "SEARCH_DRIVER_BY_TEAM_FAILURE";
 export const RESET_DRIVERS = "RESET_DRIVERS";
 
 
-export const fetchDriversRequest = () => {
-  return {
-    type: FETCH_DRIVERS_REQUEST,
-  };
-};
 
 export const setLoading = (isLoading) => {
   return {
@@ -128,32 +123,32 @@ export const fetchDrivers = () => {
     }
   };
 };
-export const searchDriverByName = (searchedDriver) => {
+export const searchDriverByName = (name) => {
   return async (dispatch) => {
     dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
 
     try {
       // Realiza la solicitud para buscar conductores por nombre
       const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
-        searchedDriver
+        name
       )}`;
       const response = await axios.get(url);
       const data = response.data;
 
-      // Si se encuentran conductores, actualiza el estado con el conductor buscado
+      // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
       if (data.length > 0) {
-        dispatch(updateSearchedDriver(data[0])); // Actualiza el estado con el primer conductor encontrado
+        dispatch(fetchDriversSuccess(data));
       } else {
-        // Si no se encuentra el conductor por nombre, intenta buscar por apellido
+        // Si no se encuentran conductores por nombre, intenta buscar por apellido
         const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
-          searchedDriver
+          name
         )}`;
         const surnameResponse = await axios.get(surnameUrl);
         const surnameData = surnameResponse.data;
 
-        // Si se encuentra el conductor por apellido, actualiza el estado con el conductor buscado
+        // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
         if (surnameData.length > 0) {
-          dispatch(updateSearchedDriver(surnameData[0])); // Actualiza el estado con el primer conductor encontrado
+          dispatch(fetchDriversSuccess(surnameData));
         } else {
           // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
           dispatch(fetchDriversFailure("No se encontraron conductores"));
