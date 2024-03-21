@@ -132,7 +132,7 @@ export const searchDriverByName = (name) => {
   return async (dispatch) => {
     try {
       // Primero, intentamos buscar por nombre
-      let url = https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
+      let url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
         name
       )}`;
       let response = await axios.get(url);
@@ -140,7 +140,7 @@ export const searchDriverByName = (name) => {
 
       // Si no encontramos resultados por nombre, intentamos buscar por apellido
       if (data.length === 0) {
-        url = `https://pif1-production.up.railway.appdrivers?name.surname=${encodeURIComponent(
+        url = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
           name
         )}`;
         response = await axios.get(url);
