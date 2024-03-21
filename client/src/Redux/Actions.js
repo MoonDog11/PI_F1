@@ -121,14 +121,14 @@ export const fetchDrivers = () => {
     }
   };
 };
-export const searchDriverByName = (name) => {
+export const searchDriverByName = (searchedDriver) => {
   return async (dispatch) => {
     dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
 
     try {
       // Realiza la solicitud para buscar conductores por nombre
       const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
-        name
+        searchedDriver
       )}`;
       const response = await axios.get(url);
       const data = response.data;
@@ -139,7 +139,7 @@ export const searchDriverByName = (name) => {
       } else {
         // Si no se encuentran conductores por nombre, intenta buscar por apellido
         const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
-          name
+          searchedDriver
         )}`;
         const surnameResponse = await axios.get(surnameUrl);
         const surnameData = surnameResponse.data;
