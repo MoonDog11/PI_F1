@@ -88,7 +88,7 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
-  const { name } = req.params; // Utilizamos req.params en lugar de req.query para obtener el nombre del conductor
+  const { name } = req.query;
 
   try {
     console.log("Searching for driver with name:", name);
@@ -98,8 +98,20 @@ const getDriverByNameController = async (req, res) => {
       console.log("Found drivers:", drivers);
       res.json(drivers);
     } else {
-      console.log("Driver not found");
-      res.status(404).send("Conductor no encontrado");
+      // Intenta buscar de nuevo convirtiendo el nombre a minúsculas
+      const lowercaseName = name.toLowerCase();
+      const lowercaseDrivers = await getDriverByNameHandler(lowercaseName);
+
+      if (lowercaseDrivers.length > 0) {
+        console.log(
+          "Found drivers (case-insensitive search):",
+          lowercaseDrivers
+        );
+        res.json(lowercaseDrivers);
+      } else {
+        console.log("Driver not found");
+        res.status(404).send("Conductor no encontrado");
+      }
     }
   } catch (error) {
     console.error("Error al obtener conductores por nombre:", error);
