@@ -125,8 +125,6 @@ export const fetchDrivers = () => {
 };
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
-    dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
-
     try {
       // Realiza la solicitud para buscar conductores por nombre
       const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
@@ -137,7 +135,7 @@ export const searchDriverByName = (name) => {
 
       // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
       if (data.length > 0) {
-        dispatch(fetchDriversSuccess(data));
+        dispatch(fetchDriversSuccess(data)); // Despacha la acción FETCH_DRIVERS_SUCCESS con la data de los conductores
       } else {
         // Si no se encuentran conductores por nombre, intenta buscar por apellido
         const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
@@ -148,7 +146,7 @@ export const searchDriverByName = (name) => {
 
         // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
         if (surnameData.length > 0) {
-          dispatch(fetchDriversSuccess(surnameData));
+          dispatch(fetchDriversSuccess(surnameData)); // Despacha la acción FETCH_DRIVERS_SUCCESS con la data de los conductores por apellido
         } else {
           // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
           dispatch(fetchDriversFailure("No se encontraron conductores"));
