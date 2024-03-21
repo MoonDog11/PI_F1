@@ -77,7 +77,6 @@ const driverReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        drivers: [],
         error: action.payload,
       };
 
