@@ -42,16 +42,8 @@ const getDriverByNameHandler = async (name) => {
     // Convertir el nombre a minúsculas antes de la búsqueda
     const lowercaseName = name.toLowerCase();
 
-    // Verificar si el parámetro parece ser solo un apellido
-    const isSurname = name.includes(".");
-
-    // Construir la parte de la URL según si es un apellido o un nombre
-    let url;
-    if (isSurname) {
-      url = `https://pif1-production.up.railway.app/drivers?name.surname=${lowercaseName}`;
-    } else {
-      url = `https://pif1-production.up.railway.app/drivers?name.forename=${lowercaseName}`;
-    }
+    // Construir la URL utilizando la nueva ruta de búsqueda por nombre
+    const url = `https://pif1-production.up.railway.app/drivers/search/${lowercaseName}`;
 
     console.log("API URL:", url);
 
