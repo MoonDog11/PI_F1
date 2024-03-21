@@ -39,18 +39,29 @@ const getDriverByIdHandler = async (idDriver) => {
 const getDriverByNameHandler = async (name) => {
   try {
     console.log("Searching for driver in the database with name:", name);
+    // Convertir el nombre a minúsculas antes de la búsqueda
+    const lowercaseName = name.toLowerCase();
 
-    // Realizamos la búsqueda en la base de datos local utilizando Sequelize
-    const drivers = await Driver.findAll({
-      where: {
-        $or: [
-          { 'name.forename': name },
-          { 'name.surname': name }
-        ]
-      }
-    });
+    // Verificar si el parámetro parece ser solo un apellido
+    const isSurname = name.includes(".");
 
-    return drivers;
+    // Construir la parte de la URL según si es un apellido o un nombre
+    let url;
+    if (isSurname) {
+      url = `https://pif1-production.up.railway.app/drivers?name.surname=${lowercaseName}`;
+    } else {
+      url = `https://pif1-production.up.railway.app/drivers?name.forename=${lowercaseName}`;
+    }
+
+    console.log("API URL:", url);
+
+    // Realizar la solicitud a la API
+    const response = await fetch(url);
+    const data = await response.json();
+
+    console.log("API Response inside action:", data);
+
+    return data;
   } catch (error) {
     console.error("Error al buscar conductores por nombre:", error);
     throw error;
