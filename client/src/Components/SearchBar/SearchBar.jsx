@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { searchDriverByName } from '../../Redux/Actions'; // Asegúrate de que la ruta sea correcta
+import { searchDriverByName } from '../../Redux/Actions';
 import './SearchBar.css';
 
-const SearchBar = () => {
+const SearchBar = ({ setSearchResults }) => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
 
   const handleChange = (event) => {
     setSearchQuery(event.target.value);
@@ -20,11 +19,9 @@ const SearchBar = () => {
     console.log('Search query:', searchQuery);
 
     try {
-      // Realiza la búsqueda y obtén los resultados
       const results = await dispatch(searchDriverByName(searchQuery));
       console.log('Search results:', results);
-      // Actualiza el estado searchResults con los resultados de la búsqueda
-      setSearchResults(results);
+      setSearchResults(results); // Pasar los resultados al CardContainer
     } catch (error) {
       console.error('Error en la búsqueda:', error);
     }
@@ -55,20 +52,6 @@ const SearchBar = () => {
           </button>
         </div>
       </form>
-
-      {/* Muestra los resultados en la interfaz de usuario */}
-      {searchResults.length > 0 && (
-        <div>
-          <h2>Go!</h2>
-          <ul>
-            {searchResults.map((driver) => (
-              <li key={driver.id}>
-                {driver.name.forename} {driver.name.surname}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 };
