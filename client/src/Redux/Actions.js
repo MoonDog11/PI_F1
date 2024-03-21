@@ -138,9 +138,16 @@ export const searchDriverByName = (name) => {
       const response = await axios.get(url);
       const data = response.data;
 
-      dispatch(fetchDriversSuccess(data));
-
-      return data;
+      // Verificar si se encontró algún conductor
+      if (data.length > 0) {
+        // Si se encontró un conductor, despachamos la acción para actualizar el estado solo con ese conductor
+        dispatch(fetchDriversSuccess([data[0]]));
+        return data[0];
+      } else {
+        // Si no se encontraron conductores, despachamos la acción para actualizar el estado con un array vacío
+        dispatch(fetchDriversSuccess([]));
+        return null;
+      }
     } catch (error) {
       dispatch(fetchDriversFailure(error.message));
       throw error;
