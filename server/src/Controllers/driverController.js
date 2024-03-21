@@ -88,7 +88,7 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
-  const { name } = req.params; // Usar req.params en lugar de req.query
+  const { name } = req.params; // Utilizamos req.params en lugar de req.query para obtener el nombre del conductor
 
   try {
     console.log("Searching for driver with name:", name);
@@ -106,6 +106,7 @@ const getDriverByNameController = async (req, res) => {
     res.status(500).send("Error al obtener conductores por nombre");
   }
 };
+
 
 const createDriverController = async (req, res) => {
   const { name, teams } = req.body;
