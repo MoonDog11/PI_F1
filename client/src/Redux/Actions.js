@@ -134,20 +134,20 @@ export const searchDriverByName = (searchedDriver) => {
       const response = await axios.get(url);
       const data = response.data;
 
-      // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
+      // Si se encuentran conductores, actualiza el estado con el conductor buscado
       if (data.length > 0) {
-        dispatch(fetchDriversSuccess(data));
+        dispatch(updateSearchedDriver(data[0])); // Actualiza el estado con el primer conductor encontrado
       } else {
-        // Si no se encuentran conductores por nombre, intenta buscar por apellido
+        // Si no se encuentra el conductor por nombre, intenta buscar por apellido
         const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
           searchedDriver
         )}`;
         const surnameResponse = await axios.get(surnameUrl);
         const surnameData = surnameResponse.data;
 
-        // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
+        // Si se encuentra el conductor por apellido, actualiza el estado con el conductor buscado
         if (surnameData.length > 0) {
-          dispatch(fetchDriversSuccess(surnameData));
+          dispatch(updateSearchedDriver(surnameData[0])); // Actualiza el estado con el primer conductor encontrado
         } else {
           // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
           dispatch(fetchDriversFailure("No se encontraron conductores"));
