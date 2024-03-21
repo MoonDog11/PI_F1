@@ -129,39 +129,33 @@ export const fetchDriversRequest = () => ({
 
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
-    dispatch(fetchDriversRequest()); 
-
     try {
-      const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`;
-      const response = await axios.get(url);
+      // Primero, intentamos buscar por nombre
+      let url = https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
+        name
+      )}`;
+      let response = await axios.get(url);
+      let data = response.data;
 
-      if (response && response.data && Array.isArray(response.data)) {
-        const data = response.data;
-
-        if (data.length > 0) {
-          dispatch(fetchDriversSuccess(data));
-          return;
-        }
+      // Si no encontramos resultados por nombre, intentamos buscar por apellido
+      if (data.length === 0) {
+        url = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
+          name
+        )}`;
+        response = await axios.get(url);
+        data = response.data;
       }
 
-      const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(name)}`;
-      const surnameResponse = await axios.get(surnameUrl);
+      dispatch(fetchDriversSuccess(data));
 
-      if (surnameResponse && surnameResponse.data && Array.isArray(surnameResponse.data)) {
-        const surnameData = surnameResponse.data;
-
-        if (surnameData.length > 0) {
-          dispatch(fetchDriversSuccess(surnameData));
-          return;
-        }
-      }
-
-      dispatch(fetchDriversFailure('No se encontraron conductores'));
+      return data;
     } catch (error) {
       dispatch(fetchDriversFailure(error.message));
+      throw error;
     }
   };
 };
+
 
 export const createDriverRequest = () => {
   return {
