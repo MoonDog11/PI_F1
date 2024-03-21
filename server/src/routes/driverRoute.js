@@ -10,9 +10,9 @@ const {
 const router = Router();
 
 router.get("/drivers", getAllDriversController);
+router.get("/drivers/:idDriver", getDriverByIdController);
 router.get("/drivers/local", getAllDriversFromRailwayController);
 router.post("/drivers", createDriverController);
-router.get("/drivers/:idDriver", getDriverByIdController);
 router.get("/drivers/:name", getDriverByNameController);
 
 
