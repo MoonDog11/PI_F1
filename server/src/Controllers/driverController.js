@@ -88,7 +88,7 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
-  const { name } = req.query;
+  const { name } = req.params; // Cambiar de req.query a req.params
 
   try {
     console.log("Searching for driver with name:", name);
@@ -98,34 +98,24 @@ const getDriverByNameController = async (req, res) => {
       console.log("Found drivers:", drivers);
       res.json(drivers);
     } else {
-      console.log("Driver not found");
-      res.status(404).send("Conductor no encontrado");
+      // Intenta buscar de nuevo convirtiendo el nombre a minúsculas
+      const lowercaseName = name.toLowerCase();
+      const lowercaseDrivers = await getDriverByNameHandler(lowercaseName);
+
+      if (lowercaseDrivers.length > 0) {
+        console.log(
+          "Found drivers (case-insensitive search):",
+          lowercaseDrivers
+        );
+        res.json(lowercaseDrivers);
+      } else {
+        console.log("Driver not found");
+        res.status(404).send("Conductor no encontrado");
+      }
     }
   } catch (error) {
     console.error("Error al obtener conductores por nombre:", error);
     res.status(500).send("Error al obtener conductores por nombre");
-  }
-};
-
-const createDriverController = async (req, res) => {
-  const { name, teams } = req.body;
-
-  if (!name || !teams || teams.length === 0) {
-    return res.status(400).json({ error: "Nombre y al menos un equipo son obligatorios." });
-  }
-
-  try {
-    const newDriver = await Driver.create({ name });
-    await newDriver.addTeams(teams);
-    const driverWithTeams = await Driver.findByPk(newDriver.id, { include: Team });
-
-    res.status(201).json({
-      message: "Conductor creado exitosamente",
-      driver: driverWithTeams,
-    });
-  } catch (error) {
-    console.error("Error al crear el conductor:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
