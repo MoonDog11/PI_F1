@@ -1,29 +1,39 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { searchDriverByName } from '../../Redux/Actions';
-import Card from '../Card/Card'; // Asegúrate de que la ruta sea correcta
+import { useDispatch } from 'react-redux';
+import { searchDriverByName } from '../../Redux/Actions'; // Asegúrate de que la ruta sea correcta
 import './SearchBar.css';
 
 const SearchBar = () => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResult, setSearchResult] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
 
-  // Manejar el cambio en el input de búsqueda
   const handleChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  // Manejar la búsqueda al hacer clic en el botón de búsqueda
   const handleSearch = async (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault(); 
+    }
+
+    console.log('Search query:', searchQuery);
+
     try {
-      // Realizar la búsqueda
-      const result = await dispatch(searchDriverByName(searchQuery));
-      // Actualizar el estado con el resultado de la búsqueda
-      setSearchResult(result);
+      // Realiza la búsqueda y obtén los resultados
+      const results = await dispatch(searchDriverByName(searchQuery));
+      console.log('Search results:', results);
+      // Actualiza el estado searchResults con los resultados de la búsqueda
+      setSearchResults(results);
     } catch (error) {
       console.error('Error en la búsqueda:', error);
+    }
+  };
+
+  const handleKeypress = async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSearch();
     }
   };
 
@@ -38,6 +48,7 @@ const SearchBar = () => {
             placeholder="Search by name"
             value={searchQuery}
             onChange={handleChange}
+            onKeyPress={handleKeypress}
           />
           <button type="submit" className="submit">
             <span className="button-text">Search</span>
@@ -45,8 +56,19 @@ const SearchBar = () => {
         </div>
       </form>
 
-      {/* Mostrar la tarjeta del conductor si se encontró un resultado */}
-      {searchResult && <Card driver={searchResult} />}
+      {/* Muestra los resultados en la interfaz de usuario */}
+      {searchResults.length > 0 && (
+        <div>
+          <h2>Go!</h2>
+          <ul>
+            {searchResults.map((driver) => (
+              <li key={driver.id}>
+                {driver.name.forename} {driver.name.surname}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
