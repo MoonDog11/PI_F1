@@ -132,7 +132,7 @@ export const searchDriverByName = (name) => {
   return async (dispatch) => {
     try {
       // Construir la URL utilizando la nueva ruta de búsqueda por nombre
-      const url = `https://pif1-production.up.railway.app/drivers/search/${encodeURIComponent(name)}`;
+      const url = `https://pif1-production.up.railway.app/${encodeURIComponent(name)}`;
       
       // Realizar la solicitud a la API
       const response = await axios.get(url);
