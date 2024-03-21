@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const {
   getAllDriversController,
-  getDriverByNameController,
+  getDriverByNameController, // Cambiado de /drivers/:name a /drivers/name/:name
   getDriverByIdController,
   createDriverController,
   getAllDriversFromRailwayController,
@@ -10,11 +10,9 @@ const {
 const router = Router();
 
 router.get("/drivers", getAllDriversController);
+router.get("/drivers/name/:name", getDriverByNameController); // Ruta para búsqueda por nombre
 router.get("/drivers/:idDriver", getDriverByIdController);
-router.get("/drivers/name/:name", getDriverByNameController);
 router.get("/drivers/local", getAllDriversFromRailwayController);
 router.post("/drivers", createDriverController);
-
-
 
 module.exports = router;
