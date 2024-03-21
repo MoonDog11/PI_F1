@@ -11,9 +11,7 @@ const onPageChange = (currentPage) => {
 export const FETCH_DRIVERS_REQUEST = "FETCH_DRIVERS_REQUEST";
 export const FETCH_DRIVERS_SUCCESS = "FETCH_DRIVERS_SUCCESS";
 export const FETCH_DRIVERS_FAILURE = "FETCH_DRIVERS_FAILURE";
-export const SEARCH_DRIVER_BY_NAME_REQUEST = "SEARCH_DRIVER_BY_NAME_REQUEST";
-export const SEARCH_DRIVER_BY_NAME_SUCCESS = "SEARCH_DRIVER_BY_NAME_SUCCESS";
-export const SEARCH_DRIVER_BY_NAME_FAILURE = "SEARCH_DRIVER_BY_NAME_FAILURE";
+
 export const CREATE_DRIVER_REQUEST = "CREATE_DRIVER_REQUEST";
 export const CREATE_DRIVER_SUCCESS = "CREATE_DRIVER_SUCCESS";
 export const CREATE_DRIVER_FAILURE = "CREATE_DRIVER_FAILURE";
@@ -123,28 +121,43 @@ export const fetchDrivers = () => {
     }
   };
 };
-
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
-    dispatch(searchDriverByNameRequest());
+    dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
 
     try {
-      const response = await axios.get(
-        `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`
-      );
+      // Realiza la solicitud para buscar conductores por nombre
+      const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
+        name
+      )}`;
+      const response = await axios.get(url);
       const data = response.data;
 
-      if (Array.isArray(data) && data.length > 0) {
-        dispatch(searchDriverByNameSuccess(data[0])); // Solo se devuelve el primer conductor encontrado
+      // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
+      if (data.length > 0) {
+        dispatch(fetchDriversSuccess(data));
       } else {
-        throw new Error("No se encontraron conductores con ese nombre");
+        // Si no se encuentran conductores por nombre, intenta buscar por apellido
+        const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
+          name
+        )}`;
+        const surnameResponse = await axios.get(surnameUrl);
+        const surnameData = surnameResponse.data;
+
+        // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
+        if (surnameData.length > 0) {
+          dispatch(fetchDriversSuccess(surnameData));
+        } else {
+          // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
+          dispatch(fetchDriversFailure("No se encontraron conductores"));
+        }
       }
     } catch (error) {
-      dispatch(searchDriverByNameFailure(error.message));
+      // Si ocurre un error durante la búsqueda, dispara la acción para indicar que la búsqueda ha fallado
+      dispatch(fetchDriversFailure(error.message));
     }
   };
 };
-
 
 export const createDriver = (driverData) => {
   return async (dispatch) => {
@@ -165,20 +178,6 @@ export const createDriver = (driverData) => {
     }
   };
 };
-
-export const searchDriverByNameRequest = () => ({
-  type: SEARCH_DRIVER_BY_NAME_REQUEST
-});
-
-export const searchDriverByNameSuccess = (driver) => ({
-  type: SEARCH_DRIVER_BY_NAME_SUCCESS,
-  payload: driver
-});
-
-export const searchDriverByNameFailure = (error) => ({
-  type: SEARCH_DRIVER_BY_NAME_FAILURE,
-  payload: error
-});
 
 export const createDriverRequest = () => {
   return {
