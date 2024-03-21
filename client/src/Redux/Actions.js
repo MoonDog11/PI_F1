@@ -178,6 +178,7 @@ export const searchDriverByName = (name) => {
     }
   };
 };
+
 export const createDriverRequest = () => {
   return {
     type: CREATE_DRIVER_REQUEST,
