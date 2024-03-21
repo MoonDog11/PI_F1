@@ -2,7 +2,6 @@ const { getAllDriversHandler, getDriverByNameHandler, getDriverByIdHandler, sear
 const { Driver, Team } = require("../db");
 const axios = require("axios");
 
-
 const formatDriverData = (driverData) => {
   // Asegurarse de que driverRef tenga un valor predeterminado
   const driverRef = driverData.driverRef || "defaultDriverRef";
@@ -29,7 +28,6 @@ const formatDriverData = (driverData) => {
     description: driverData.description || null,
   };
 };
-
 
 const railwayURL = 'https://pif1-production.up.railway.app/drivers';
 
@@ -64,8 +62,6 @@ const saveDriversToLocalhost = async (req, res, driversData) => {
     }
   }
 };
-
-
 
 async function fetchDataFromLocalhost() {
   try {
@@ -177,8 +173,8 @@ const getAllDriversFromRailwayController = async (req, res) => {
     res.status(500).json({ error: "Error getting drivers from Railway" });
   }
 };
+
 module.exports = {
-  createDriverController,
   getAllDriversFromRailwayController,
   getAllDriversController,
   getDriverByNameController,
