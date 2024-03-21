@@ -121,40 +121,33 @@ export const fetchDrivers = () => {
     }
   };
 };
+
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
-    dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
+    dispatch(setLoading(true)); // Indicar que se está realizando la búsqueda
 
     try {
-      // Realiza la solicitud para buscar conductores por nombre
-      const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
-        name
-      )}`;
-      const response = await axios.get(url);
+      // Realizar la solicitud para buscar un conductor por nombre
+      const response = await axios.get(
+        `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`
+      );
+
       const data = response.data;
 
-      // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
-      if (data.length > 0) {
-        dispatch(fetchDriversSuccess(data));
+      // Verificar si se encontró un conductor
+      if (Array.isArray(data) && data.length > 0) {
+        // Si se encontró al menos un conductor, obtener el primer conductor encontrado y despatchear la acción de éxito
+        const driver = data[0]; // Obtener el primer conductor encontrado
+        dispatch(fetchDriversSuccess([driver])); // Pasar un array con el conductor encontrado para mantener coherencia con el formato esperado por fetchDriversSuccess
       } else {
-        // Si no se encuentran conductores por nombre, intenta buscar por apellido
-        const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
-          name
-        )}`;
-        const surnameResponse = await axios.get(surnameUrl);
-        const surnameData = surnameResponse.data;
-
-        // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
-        if (surnameData.length > 0) {
-          dispatch(fetchDriversSuccess(surnameData));
-        } else {
-          // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
-          dispatch(fetchDriversFailure("No se encontraron conductores"));
-        }
+        // Si no se encuentra ningún conductor, despatchear la acción de fallo con un mensaje adecuado
+        dispatch(fetchDriversFailure("No se encontró ningún conductor con ese nombre"));
       }
     } catch (error) {
-      // Si ocurre un error durante la búsqueda, dispara la acción para indicar que la búsqueda ha fallado
+      // Si ocurre un error durante la búsqueda, despatchear la acción de fallo con el mensaje de error
       dispatch(fetchDriversFailure(error.message));
+    } finally {
+      dispatch(setLoading(false)); // Indicar que la búsqueda ha finalizado, independientemente del resultado
     }
   };
 };
