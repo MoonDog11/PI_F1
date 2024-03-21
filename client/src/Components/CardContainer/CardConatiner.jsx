@@ -1,14 +1,12 @@
-// CardsContainer.jsx
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Card from "../Card/Card";
 import { Link } from "react-router-dom";
-import styles from "./CardContainer.module.css";
+import styles from "./CradContainer.module.css";
 
 const CardsContainer = ({ currentPage, itemsPerPage, sortOrder, selectedTeam }) => {
   const drivers = useSelector((state) => state.searchedDriver);
   const teams = useSelector((state) => state.teams);
-  const searchResults = useSelector((state) => state.searchResults); // Nueva adición
 
   const [filteredTeamDrivers, setFilteredTeamDrivers] = useState([]);
 
@@ -23,12 +21,6 @@ const CardsContainer = ({ currentPage, itemsPerPage, sortOrder, selectedTeam }) 
       }
     }
   }, [drivers, selectedTeam, teams]);
-
-  useEffect(() => {
-    if (searchResults && searchResults.length > 0) {
-      setFilteredTeamDrivers(searchResults);
-    }
-  }, [searchResults]);
 
   const sortedDrivers = sortOrder === null || sortOrder === undefined
     ? [...filteredTeamDrivers]
