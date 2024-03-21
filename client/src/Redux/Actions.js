@@ -142,6 +142,7 @@ export const searchDriverByName = (name) => {
 
         // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
         if (data.length > 0) {
+          console.log("Conductores encontrados por nombre:", data); // Nuevo log agregado
           dispatch(fetchDriversSuccess(data));
           return; // Salir de la función después de despachar la acción exitosa
         }
@@ -157,6 +158,7 @@ export const searchDriverByName = (name) => {
 
         // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
         if (surnameData.length > 0) {
+          console.log("Conductores encontrados por apellido:", surnameData); // Nuevo log agregado
           dispatch(fetchDriversSuccess(surnameData));
           return; // Salir de la función después de despachar la acción exitosa
         }
@@ -167,25 +169,6 @@ export const searchDriverByName = (name) => {
     } catch (error) {
       // Si ocurre un error durante la búsqueda, dispara la acción para indicar que la búsqueda ha fallado
       dispatch(fetchDriversFailure(error.message));
-    }
-  };
-};
-export const createDriver = (driverData) => {
-  return async (dispatch) => {
-    dispatch(createDriverRequest());
-
-    try {
-      const response = await axios.post(
-        "https://pif1-production.up.railway.app/drivers",
-        driverData
-      );
-      console.log("API Response for createDriver action:", response.data);
-
-      dispatch(createDriverSuccess(response.data));
-      return response.data;
-    } catch (error) {
-      dispatch(createDriverFailure(error.message));
-      throw error;
     }
   };
 };
