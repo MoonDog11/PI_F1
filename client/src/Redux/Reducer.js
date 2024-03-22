@@ -18,7 +18,6 @@ import {
   SEARCH_DRIVER_BY_NAME_REQUEST,
   SEARCH_DRIVER_BY_NAME_SUCCESS,
   SEARCH_DRIVER_BY_NAME_FAILURE,
-  // Agrega las nuevas acciones aquí según sea necesario
 } from "./Actions";
 
 const initialState = {
@@ -120,15 +119,6 @@ const driverReducer = (state = initialState, action) => {
         loading: action.payload,
       };
 
-    // Otros casos según sea necesario
-    case "FETCH_DRIVERS":
-      // Reducer para FETCH_DRIVERS (tu lógica actual)
-      return { ...state, searchedDriver: action.payload };
-
-    case "SET_LOADING":
-      // Reducer para SET_LOADING (tu lógica actual)
-      return { ...state, loading: action.payload };
-
     case TOGGLE_SORT_ORDER:
       return {
         ...state,
@@ -165,7 +155,7 @@ const driverReducer = (state = initialState, action) => {
         searchedDriver: initialState.searchedDriver,
       };
 
-      case SEARCH_DRIVER_BY_NAME_REQUEST:
+    case SEARCH_DRIVER_BY_NAME_REQUEST:
       return {
         ...state,
         loading: true,
@@ -187,7 +177,6 @@ const driverReducer = (state = initialState, action) => {
         drivers: [],
         error: action.payload,
       };
-
 
     default:
       return state;
