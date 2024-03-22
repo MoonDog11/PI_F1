@@ -85,8 +85,8 @@ const getAllDriversController = async (req, res) => {
 
 const getDriverByNameController = async (req, res) => {
   try {
-    const { name } = req.params;
-    const url = `https://pif1-production.up.railway.app/drivers/name/${name}`;
+    const { name } = req.query; // Accediendo al query en lugar de params
+    const url = `https://pif1-production.up.railway.app/drivers?name=${name}`; // Usando query en la URL
     
     console.log("URL de la solicitud al servidor:", url);
 
