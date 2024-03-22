@@ -36,6 +36,7 @@ const getDriverByIdHandler = async (idDriver) => {
     throw error;
   }
 };
+
 const getDriverByNameHandler = async (name) => {
   try {
     console.log("Searching for driver in the database with name:", name);
@@ -46,12 +47,14 @@ const getDriverByNameHandler = async (name) => {
     const isSurname = name.includes(".");
 
     // Construir la parte de la URL según si es un apellido o un nombre
-    let url;
+    let endpoint;
     if (isSurname) {
-      url = `https://pif1-production.up.railway.app/drivers?name.surname=${lowercaseName}`;
+      endpoint = `name.surname=${encodeURIComponent(lowercaseName)}`;
     } else {
-      url = `https://pif1-production.up.railway.app/drivers?name.forename=${lowercaseName}`;
+      endpoint = `name.forename=${encodeURIComponent(lowercaseName)}`;
     }
+
+    const url = `https://pif1-production.up.railway.app/drivers?${endpoint}`;
 
     console.log("API URL:", url);
 
