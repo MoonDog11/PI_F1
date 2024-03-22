@@ -156,25 +156,6 @@ export const createDriver = (driverData) => {
     }
   };
 };
-export const createDriverRequest = () => {
-  return {
-    type: CREATE_DRIVER_REQUEST,
-  };
-};
-
-export const createDriverSuccess = (driver) => {
-  return {
-    type: CREATE_DRIVER_SUCCESS,
-    payload: driver,
-  };
-};
-
-export const createDriverFailure = (error) => {
-  return {
-    type: CREATE_DRIVER_FAILURE,
-    payload: error,
-  };
-};
 
 export const setDrivers = (drivers) => ({
   type: "SET_DRIVERS",
