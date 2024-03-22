@@ -40,25 +40,11 @@ const getDriverByIdHandler = async (idDriver) => {
 const getDriverByNameHandler = async (name) => {
   try {
     console.log("Searching for driver in the database with name:", name);
-    // Convertir el nombre a minúsculas antes de la búsqueda
-    const lowercaseName = name.toLowerCase();
 
-    // Verificar si el parámetro parece ser solo un apellido
-    const isSurname = name.includes(".");
-
-    // Construir la parte de la URL según si es un apellido o un nombre
-    let endpoint;
-    if (isSurname) {
-      endpoint = `name.surname=${encodeURIComponent(lowercaseName)}`;
-    } else {
-      endpoint = `name.forename=${encodeURIComponent(lowercaseName)}`;
-    }
-
-    const url = `https://pif1-production.up.railway.app/drivers?${endpoint}`;
+    const url = `https://pif1-production.up.railway.app/drivers/name/${name}`;
 
     console.log("API URL:", url);
 
-    // Realizar la solicitud a la API
     const response = await fetch(url);
     const data = await response.json();
 
