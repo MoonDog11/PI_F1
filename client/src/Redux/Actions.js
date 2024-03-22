@@ -1,17 +1,17 @@
 import axios from "axios";
-
-// Definición de constantes y funciones auxiliares
 const ITEMS_PER_PAGE = 10;
 
+// Definición de la función onPageChange
 const onPageChange = (currentPage) => {
   // Lógica para manejar el cambio de página
   console.log("Página cambiada a:", currentPage);
 };
 
 // Action Types
-export const FETCH_DRIVERS_REQUEST = 'FETCH_DRIVERS_REQUEST';
-export const FETCH_DRIVERS_SUCCESS = 'FETCH_DRIVERS_SUCCESS';
-export const FETCH_DRIVERS_FAILURE = 'FETCH_DRIVERS_FAILURE';
+export const FETCH_DRIVERS_REQUEST = "FETCH_DRIVERS_REQUEST";
+export const FETCH_DRIVERS_SUCCESS = "FETCH_DRIVERS_SUCCESS";
+export const FETCH_DRIVERS_FAILURE = "FETCH_DRIVERS_FAILURE";
+
 export const CREATE_DRIVER_REQUEST = "CREATE_DRIVER_REQUEST";
 export const CREATE_DRIVER_SUCCESS = "CREATE_DRIVER_SUCCESS";
 export const CREATE_DRIVER_FAILURE = "CREATE_DRIVER_FAILURE";
@@ -26,42 +26,75 @@ export const SEARCH_DRIVER_BY_TEAM_REQUEST = "SEARCH_DRIVER_BY_TEAM_REQUEST";
 export const SEARCH_DRIVER_BY_TEAM_SUCCESS = "SEARCH_DRIVER_BY_TEAM_SUCCESS";
 export const SEARCH_DRIVER_BY_TEAM_FAILURE = "SEARCH_DRIVER_BY_TEAM_FAILURE";
 export const RESET_DRIVERS = "RESET_DRIVERS";
-export const SEARCH_DRIVER_BY_NAME_REQUEST = 'SEARCH_DRIVER_BY_NAME_REQUEST';
-export const SEARCH_DRIVER_BY_NAME_SUCCESS = 'SEARCH_DRIVER_BY_NAME_SUCCESS';
-export const SEARCH_DRIVER_BY_NAME_FAILURE = 'SEARCH_DRIVER_BY_NAME_FAILURE';
 
-export const searchDriverByNameRequest = () => ({
-  type: SEARCH_DRIVER_BY_NAME_REQUEST,
-});
+export const setLoading = (isLoading) => {
+  return {
+    type: SET_LOADING,
+    payload: isLoading,
+  };
+};
 
-export const searchDriverByNameSuccess = (drivers) => ({
-  type: SEARCH_DRIVER_BY_NAME_SUCCESS,
-  payload: drivers,
-});
+export const clearSearchError = () => {
+  return {
+    type: CLEAR_SEARCH_ERROR,
+  };
+};
 
-export const searchDriverByNameFailure = (error) => ({
-  type: SEARCH_DRIVER_BY_NAME_FAILURE,
-  payload: error,
-});
+export const fetchDriversSuccess = (data) => {
+  return async (dispatch) => {
+    try {
+      const teams = {};
+      const allDrivers = [];
+      const uniqueTeamSet = new Set();
 
-export const setLoading = (isLoading) => ({
-  type: SET_LOADING,
-  payload: isLoading,
-});
+      if (Array.isArray(data)) {
+        data.forEach((driver) => {
+          if (typeof driver.teams === "string") {
+            const teamsList = driver.teams.split(",");
+            teamsList.forEach((team) => {
+              const teamName = team.trim() || "Unknown Team";
+              if (!uniqueTeamSet.has(teamName)) {
+                uniqueTeamSet.add(teamName);
+                teams[teamName] = [];
+              }
+              teams[teamName].push(driver);
+            });
+          } else {
+            const teamName = "Unknown Team";
+            if (!uniqueTeamSet.has(teamName)) {
+              uniqueTeamSet.add(teamName);
+              teams[teamName] = [];
+            }
+            teams[teamName].push(driver);
+          }
+          allDrivers.push(driver);
+        });
+      }
 
-export const clearSearchError = () => ({
-  type: CLEAR_SEARCH_ERROR,
-});
+      const uniqueTeamNames = Array.from(uniqueTeamSet);
 
-export const fetchDriversSuccess = (data) => ({
-  type: FETCH_DRIVERS_SUCCESS,
-  payload: data,
-});
+      console.log("Equipos:", teams);
 
-export const fetchDriversFailure = (error) => ({
-  type: FETCH_DRIVERS_FAILURE,
-  payload: error,
-});
+      dispatch({
+        type: FETCH_DRIVERS_SUCCESS,
+        payload: {
+          drivers: allDrivers,
+          teams: teams,
+          teamNames: uniqueTeamNames,
+        },
+      });
+    } catch (error) {
+      console.error("Error en fetchDrivers:", error.message);
+    }
+  };
+};
+
+export const fetchDriversFailure = (error) => {
+  return {
+    type: FETCH_DRIVERS_FAILURE,
+    payload: error,
+  };
+};
 
 export const fetchDrivers = () => {
   return async (dispatch) => {
@@ -88,54 +121,43 @@ export const fetchDrivers = () => {
     }
   };
 };
-
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
-    dispatch(searchDriverByNameRequest()); // Despacha la acción para indicar que se está realizando la solicitud de búsqueda
+    dispatch(fetchDriversRequest()); // Dispara la acción para indicar que se está realizando la solicitud de búsqueda
 
     try {
       // Realiza la solicitud para buscar conductores por nombre
-      const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`;
+      const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
+        name
+      )}`;
       const response = await axios.get(url);
       const data = response.data;
 
-      // Verifica si data está definido y si tiene una longitud mayor que cero
-      if (data && data.length > 0) {
-        dispatch(searchDriverByNameSuccess(data)); // Despacha la acción de éxito con los datos de los conductores
+      // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
+      if (data.length > 0) {
+        dispatch(fetchDriversSuccess(data));
       } else {
         // Si no se encuentran conductores por nombre, intenta buscar por apellido
-        const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(name)}`;
+        const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
+          name
+        )}`;
         const surnameResponse = await axios.get(surnameUrl);
         const surnameData = surnameResponse.data;
 
-        // Verifica si surnameData está definido y si tiene una longitud mayor que cero
-        if (surnameData && surnameData.length > 0) {
-          dispatch(searchDriverByNameSuccess(surnameData)); // Despacha la acción de éxito con los datos de los conductores por apellido
+        // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
+        if (surnameData.length > 0) {
+          dispatch(fetchDriversSuccess(surnameData));
         } else {
           // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
-          dispatch(searchDriverByNameFailure("No se encontraron conductores"));
+          dispatch(fetchDriversFailure("No se encontraron conductores"));
         }
       }
     } catch (error) {
       // Si ocurre un error durante la búsqueda, dispara la acción para indicar que la búsqueda ha fallado
-      dispatch(searchDriverByNameFailure(error.message));
+      dispatch(fetchDriversFailure(error.message));
     }
   };
 };
-
-export const createDriverRequest = () => ({
-  type: CREATE_DRIVER_REQUEST,
-});
-
-export const createDriverSuccess = (driver) => ({
-  type: CREATE_DRIVER_SUCCESS,
-  payload: driver,
-});
-
-export const createDriverFailure = (error) => ({
-  type: CREATE_DRIVER_FAILURE,
-  payload: error,
-});
 
 export const createDriver = (driverData) => {
   return async (dispatch) => {
@@ -154,6 +176,26 @@ export const createDriver = (driverData) => {
       dispatch(createDriverFailure(error.message));
       throw error;
     }
+  };
+};
+
+export const createDriverRequest = () => {
+  return {
+    type: CREATE_DRIVER_REQUEST,
+  };
+};
+
+export const createDriverSuccess = (driver) => {
+  return {
+    type: CREATE_DRIVER_SUCCESS,
+    payload: driver,
+  };
+};
+
+export const createDriverFailure = (error) => {
+  return {
+    type: CREATE_DRIVER_FAILURE,
+    payload: error,
   };
 };
 
@@ -190,15 +232,17 @@ export const getDriverById = (id) => {
     }
   };
 };
-export const setSelectedDriver = (driver) => ({
-  type: SET_SELECTED_DRIVER,
-  payload: driver,
-});
+
+export const setSelectedDriver = (driver) => {
+  return {
+    type: "SET_SELECTED_DRIVER",
+    payload: driver,
+  };
+};
 
 export const toggleSortOrder = () => ({
-  type: TOGGLE_SORT_ORDER,
+  type: "TOGGLE_SORT_ORDER",
 });
-
 export const searchDriverByTeamRequest = () => ({
   type: SEARCH_DRIVER_BY_TEAM_REQUEST,
 });
