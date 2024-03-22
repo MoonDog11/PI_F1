@@ -6,41 +6,35 @@ import Card from '../Card/Card';
 
 const SearchBar = () => {
   const dispatch = useDispatch();
-  const searchResults = useSelector(state => state.searchedDriver); // Obteniendo los resultados de búsqueda del estado global
-
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
-  const handleChange = (event) => {
-    setSearchQuery(event.target.value);
+  const handleSearch = async (e) => {
+    if (e) {
+      e.preventDefault(); 
+    }
+
+    console.log('Search query:', searchQuery);
+
+    try {
+      const results = await dispatch(searchDriverByName(searchQuery));
+      console.log('Search results:', results);
+    } catch (error) {
+      console.error('Error en la búsqueda:', error);
+    }
   };
 
- const handleSearch = async (e) => {
-  if (e) {
-    e.preventDefault(); 
-  }
-
-  console.log('Search query:', searchQuery);
-
-  try {
-    // Realiza la búsqueda y obtén los resultados
-    const results = await dispatch(searchDriverByName(searchQuery));
-    console.log('Search results:', results);
-    // Actualiza el estado searchResults con los resultados de la búsqueda
-    setSearchResults(results); // Aquí actualizas el estado searchResults
-  } catch (error) {
-    console.error('Error en la búsqueda:', error);
-  }
-};
-
   useEffect(() => {
-    // Si hay resultados de búsqueda, se actualizará automáticamente
-    // cada vez que searchedDriver cambie en el estado global
-    console.log('Search Results:', searchResults);
-  }, [searchResults]);
+    if (searchQuery !== '') {
+      handleSearch(); // Realiza la búsqueda cuando searchQuery cambie
+    } else {
+      setSearchResults([]); // Restablece los resultados de la búsqueda si searchQuery está vacío
+    }
+  }, [searchQuery]); // Ejecuta el efecto cuando searchQuery cambie
 
   return (
     <div className="driver-form-container-2">
-      <form onSubmit={handleSearch}>
+      <form onSubmit={e => e.preventDefault()}>
         <h1 className="driver-finder-title">Driver Finder</h1>
         <div className="search-bar-container">
           <input
@@ -48,15 +42,14 @@ const SearchBar = () => {
             type="text"
             placeholder="Search by name"
             value={searchQuery}
-            onChange={handleChange}
+            onChange={e => setSearchQuery(e.target.value)}
           />
-          <button type="submit" className="submit">
+          <button type="submit" className="submit" onClick={handleSearch}>
             <span className="button-text">Search</span>
           </button>
         </div>
       </form>
 
-      {/* Muestra las tarjetas de los conductores en la interfaz de usuario */}
       {searchResults.length > 0 && (
         <div>
           <h2>Search Results</h2>
