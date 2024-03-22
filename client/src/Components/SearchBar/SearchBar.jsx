@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { searchDriverByName } from '../../Redux/Actions';
+import { useDispatch } from 'react-redux';
+import { searchDriverByName } from '../../Redux/Actions'; // Asegúrate de que la ruta sea correcta
 import './SearchBar.css';
 import Card from '../Card/Card'; 
 
@@ -8,17 +8,33 @@ const SearchBar = () => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const isLoading = useSelector(state => state.loading); // Obtener el estado de carga desde Redux
+
+  const handleChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
   const handleSearch = async (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault(); 
+    }
+
+    console.log('Search query:', searchQuery);
+
     try {
-      // Realizar la búsqueda solo si searchQuery no está vacío
-      if (searchQuery.trim() !== '') {
-        dispatch(searchDriverByName(searchQuery)); // Disparar la acción de búsqueda
-      }
+      // Realiza la búsqueda y obtén los resultados
+      const results = await dispatch(searchDriverByName(searchQuery));
+      console.log('Search results:', results);
+      // Actualiza el estado searchResults con los resultados de la búsqueda
+      setSearchResults(results);
     } catch (error) {
       console.error('Error en la búsqueda:', error);
+    }
+  };
+
+  const handleKeypress = async (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleSearch();
     }
   };
 
@@ -32,15 +48,16 @@ const SearchBar = () => {
             type="text"
             placeholder="Search by name"
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={handleChange}
+            onKeyPress={handleKeypress}
           />
-          <button type="submit" className="submit" disabled={isLoading}>
-            {/* Mostrar un mensaje de carga en el botón mientras se está cargando */}
-            {isLoading ? 'Loading...' : 'Search'}
+          <button type="submit" className="submit">
+            <span className="button-text">Search</span>
           </button>
         </div>
       </form>
 
+     {/* Muestra las tarjetas de los conductores en la interfaz de usuario */}
       {searchResults.length > 0 && (
         <div>
           <h2>Search Results</h2>
