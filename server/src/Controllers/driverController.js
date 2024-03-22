@@ -85,18 +85,17 @@ const getAllDriversController = async (req, res) => {
 
 const getDriverByNameController = async (req, res) => {
   try {
-    const { name } = req.query; // Accediendo al query en lugar de params
-    const url = `https://pif1-production.up.railway.app/drivers?name=${name}`; // Usando query en la URL
-    
+    const { name } = req.query; // Obtenemos el nombre del conductor del query
+    const url = `https://pif1-production.up.railway.app/drivers?name=${name}`; // Modificamos la URL para incluir el query
+
     console.log("URL de la solicitud al servidor:", url);
 
     const response = await axios.get(url);
-    
+
     console.log("Respuesta del servidor:", response.data);
 
-    // Ahora intenta analizar la respuesta como JSON
-    const drivers = response.data;
-    res.json(drivers);
+    // Devolvemos la respuesta del servidor
+    res.json(response.data);
   } catch (error) {
     console.error('Error en la búsqueda de conductores:', error);
     res.status(500).json({ error: 'Error en la búsqueda de conductores' });
