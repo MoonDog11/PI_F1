@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'; // Importa useSelector para acceder al estado global
 import { searchDriverByName } from '../../Redux/Actions'; // Asegúrate de que la ruta sea correcta
 import './SearchBar.css';
 import Card from '../Card/Card'; 
@@ -7,31 +7,26 @@ import Card from '../Card/Card';
 const SearchBar = () => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  // Obtén el estado searchedDriver del store usando useSelector
+  const searchResults = useSelector(state => state.searchedDriver);
 
   const handleChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
- const handleSearch = async (e) => {
-  if (e) {
-    e.preventDefault(); 
-  }
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    console.log('Search query:', searchQuery);
 
-  console.log('Search query:', searchQuery);
+    try {
+      // Despacha la acción para buscar conductores por nombre
+      await dispatch(searchDriverByName(searchQuery));
+    } catch (error) {
+      console.error('Error en la búsqueda:', error);
+    }
+  };
 
-  try {
-    // Realiza la búsqueda y obtén los resultados
-    const results = await dispatch(searchDriverByName(searchQuery));
-    console.log('Search results:', results);
-    // Actualiza el estado searchResults con los resultados de la búsqueda
-    setSearchResults(results);
-  } catch (error) {
-    console.error('Error en la búsqueda:', error);
-  }
-};
-
-  const handleKeypress = async (event) => {
+  const handleKeypress = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleSearch();
@@ -57,7 +52,7 @@ const SearchBar = () => {
         </div>
       </form>
 
-     {/* Muestra las tarjetas de los conductores en la interfaz de usuario */}
+      {/* Muestra las tarjetas de los conductores en la interfaz de usuario */}
       {searchResults.length > 0 && (
         <div>
           <h2>Search Results</h2>
