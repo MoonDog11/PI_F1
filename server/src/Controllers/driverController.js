@@ -84,7 +84,7 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
-  ctry {
+  try {
     const { name } = req.query;
     const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`;
     const response = await axios.get(url);
