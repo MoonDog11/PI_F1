@@ -84,34 +84,15 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
-  const { name } = req.query;
-
-  try {
-    console.log("Searching for driver with name:", name);
-    const drivers = await getDriverByNameHandler(name);
-
-    if (drivers.length > 0) {
-      console.log("Found drivers:", drivers);
-      res.json(drivers);
-    } else {
-      // Intenta buscar de nuevo convirtiendo el nombre a minúsculas
-      const lowercaseName = name.toLowerCase();
-      const lowercaseDrivers = await getDriverByNameHandler(lowercaseName);
-
-      if (lowercaseDrivers.length > 0) {
-        console.log(
-          "Found drivers (case-insensitive search):",
-          lowercaseDrivers
-        );
-        res.json(lowercaseDrivers);
-      } else {
-        console.log("Driver not found");
-        res.status(404).send("Conductor no encontrado");
-      }
-    }
+  ctry {
+    const { name } = req.query;
+    const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`;
+    const response = await axios.get(url);
+    const drivers = response.data;
+    res.json(drivers);
   } catch (error) {
-    console.error("Error al obtener conductores por nombre:", error);
-    res.status(500).send("Error al obtener conductores por nombre");
+    console.error('Error en la búsqueda de conductores:', error);
+    res.status(500).json({ error: 'Error en la búsqueda de conductores' });
   }
 };
 
