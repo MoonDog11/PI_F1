@@ -26,8 +26,23 @@ export const SEARCH_DRIVER_BY_TEAM_REQUEST = "SEARCH_DRIVER_BY_TEAM_REQUEST";
 export const SEARCH_DRIVER_BY_TEAM_SUCCESS = "SEARCH_DRIVER_BY_TEAM_SUCCESS";
 export const SEARCH_DRIVER_BY_TEAM_FAILURE = "SEARCH_DRIVER_BY_TEAM_FAILURE";
 export const RESET_DRIVERS = "RESET_DRIVERS";
+export const SEARCH_DRIVER_BY_NAME_REQUEST = 'SEARCH_DRIVER_BY_NAME_REQUEST';
+export const SEARCH_DRIVER_BY_NAME_SUCCESS = 'SEARCH_DRIVER_BY_NAME_SUCCESS';
+export const SEARCH_DRIVER_BY_NAME_FAILURE = 'SEARCH_DRIVER_BY_NAME_FAILURE';
 
+export const searchDriverByNameRequest = () => ({
+  type: SEARCH_DRIVER_BY_NAME_REQUEST,
+});
 
+export const searchDriverByNameSuccess = (drivers) => ({
+  type: SEARCH_DRIVER_BY_NAME_SUCCESS,
+  payload: drivers,
+});
+
+export const searchDriverByNameFailure = (error) => ({
+  type: SEARCH_DRIVER_BY_NAME_FAILURE,
+  payload: error,
+});
 
 export const setLoading = (isLoading) => {
   return {
@@ -123,38 +138,37 @@ export const fetchDrivers = () => {
     }
   };
 };
+
 export const searchDriverByName = (name) => {
   return async (dispatch) => {
+    dispatch(searchDriverByNameRequest()); // Despacha la acción para indicar que se está realizando la solicitud de búsqueda
+
     try {
       // Realiza la solicitud para buscar conductores por nombre
-      const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(
-        name
-      )}`;
+      const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`;
       const response = await axios.get(url);
       const data = response.data;
 
       // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
       if (data.length > 0) {
-        dispatch(fetchDriversSuccess(data)); // Despacha la acción FETCH_DRIVERS_SUCCESS con la data de los conductores
+        dispatch(searchDriverByNameSuccess(data)); // Despacha la acción de éxito con los datos de los conductores
       } else {
         // Si no se encuentran conductores por nombre, intenta buscar por apellido
-        const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(
-          name
-        )}`;
+        const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(name)}`;
         const surnameResponse = await axios.get(surnameUrl);
         const surnameData = surnameResponse.data;
 
         // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
         if (surnameData.length > 0) {
-          dispatch(fetchDriversSuccess(surnameData)); // Despacha la acción FETCH_DRIVERS_SUCCESS con la data de los conductores por apellido
+          dispatch(searchDriverByNameSuccess(surnameData)); // Despacha la acción de éxito con los datos de los conductores por apellido
         } else {
           // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
-          dispatch(fetchDriversFailure("No se encontraron conductores"));
+          dispatch(searchDriverByNameFailure("No se encontraron conductores"));
         }
       }
     } catch (error) {
       // Si ocurre un error durante la búsqueda, dispara la acción para indicar que la búsqueda ha fallado
-      dispatch(fetchDriversFailure(error.message));
+      dispatch(searchDriverByNameFailure(error.message));
     }
   };
 };
