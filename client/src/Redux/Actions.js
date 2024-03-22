@@ -30,7 +30,6 @@ export const SEARCH_DRIVER_BY_NAME_REQUEST = 'SEARCH_DRIVER_BY_NAME_REQUEST';
 export const SEARCH_DRIVER_BY_NAME_SUCCESS = 'SEARCH_DRIVER_BY_NAME_SUCCESS';
 export const SEARCH_DRIVER_BY_NAME_FAILURE = 'SEARCH_DRIVER_BY_NAME_FAILURE';
 
-// Action Creators
 export const searchDriverByNameRequest = () => ({
   type: SEARCH_DRIVER_BY_NAME_REQUEST,
 });
@@ -54,180 +53,138 @@ export const clearSearchError = () => ({
   type: CLEAR_SEARCH_ERROR,
 });
 
-// Reducer
-const initialState = {
-  teams: {},
-  teamNames: [],
-  drivers: [],
-  newDriver: null,
-  loading: false,
-  error: null,
-  searchError: null,
-  searchedDriver: [],
-  selectedDriver: null,
-  sortDrivers: false,
+export const fetchDriversSuccess = (data) => ({
+  type: FETCH_DRIVERS_SUCCESS,
+  payload: data,
+});
+
+export const fetchDriversFailure = (error) => ({
+  type: FETCH_DRIVERS_FAILURE,
+  payload: error,
+});
+
+export const fetchDrivers = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(setLoading(true));
+
+      const response = await axios.get(
+        "https://pif1-production.up.railway.app/drivers"
+      );
+
+      console.log("API Response inside action:", response.data);
+
+      if (!Array.isArray(response.data)) {
+        throw new Error("API response is not an array");
+      }
+
+      dispatch(fetchDriversSuccess(response.data));
+    } catch (error) {
+      console.error("Error in fetchDrivers:", error.message);
+      dispatch(fetchDriversFailure(error.message));
+      throw error;
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
 };
 
-const driverReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case FETCH_DRIVERS_REQUEST:
-    case CREATE_DRIVER_REQUEST:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-      };
+export const searchDriverByName = (name) => {
+  return async (dispatch) => {
+    dispatch(searchDriverByNameRequest()); // Despacha la acción para indicar que se está realizando la solicitud de búsqueda
 
-    case FETCH_DRIVERS_SUCCESS:
-      const teams = {};
-      const allDrivers = [];
-      const uniqueTeamSet = new Set();
+    try {
+      // Realiza la solicitud para buscar conductores por nombre
+      const url = `https://pif1-production.up.railway.app/drivers?name.forename=${encodeURIComponent(name)}`;
+      const response = await axios.get(url);
+      const data = response.data;
 
-      action.payload.forEach((driver) => {
-        if (typeof driver.teams === "string") {
-          const teamsList = driver.teams.split(",");
-          teamsList.forEach((team) => {
-            const teamName = team.trim() || "Unknown Team";
-            if (!uniqueTeamSet.has(teamName)) {
-              uniqueTeamSet.add(teamName);
-              teams[teamName] = [];
-            }
-            teams[teamName].push(driver);
-          });
+      // Verifica si data está definido y si tiene una longitud mayor que cero
+      if (data && data.length > 0) {
+        dispatch(searchDriverByNameSuccess(data)); // Despacha la acción de éxito con los datos de los conductores
+      } else {
+        // Si no se encuentran conductores por nombre, intenta buscar por apellido
+        const surnameUrl = `https://pif1-production.up.railway.app/drivers?name.surname=${encodeURIComponent(name)}`;
+        const surnameResponse = await axios.get(surnameUrl);
+        const surnameData = surnameResponse.data;
+
+        // Verifica si surnameData está definido y si tiene una longitud mayor que cero
+        if (surnameData && surnameData.length > 0) {
+          dispatch(searchDriverByNameSuccess(surnameData)); // Despacha la acción de éxito con los datos de los conductores por apellido
         } else {
-          const teamName = "Unknown Team";
-          if (!uniqueTeamSet.has(teamName)) {
-            uniqueTeamSet.add(teamName);
-            teams[teamName] = [];
-          }
-          teams[teamName].push(driver);
+          // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
+          dispatch(searchDriverByNameFailure("No se encontraron conductores"));
         }
-        allDrivers.push(driver);
-      });
-
-      const uniqueTeamNames = Array.from(uniqueTeamSet);
-
-      return {
-        ...state,
-        loading: false,
-        drivers: allDrivers,
-        teams: teams,
-        teamNames: uniqueTeamNames,
-        newDriver: action.payload,
-        searchedDriver: action.payload,
-      };
-
-    case CREATE_DRIVER_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        newDriver: action.payload,
-        drivers: [...state.drivers, action.payload],
-      };
-
-    case FETCH_DRIVERS_FAILURE:
-    case CREATE_DRIVER_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-
-    case CLEAR_SEARCH_ERROR:
-      return {
-        ...state,
-        searchError: null,
-      };
-
-    case GET_DRIVER_BY_ID_SUCCESS:
-      return {
-        ...state,
-        selectedDriver: action.payload,
-        loading: false,
-        error: null,
-      };
-
-    case GET_DRIVER_BY_ID_FAILURE:
-      return {
-        ...state,
-        selectedDriver: null,
-        loading: false,
-        error: action.payload,
-      };
-
-    case SET_SELECTED_DRIVER:
-      return {
-        ...state,
-        selectedDriver: action.payload,
-      };
-
-    case SET_LOADING:
-      return {
-        ...state,
-        loading: action.payload,
-      };
-
-    case TOGGLE_SORT_ORDER:
-      return {
-        ...state,
-        sortDrivers: !state.sortDrivers,
-      };
-
-    case SEARCH_DRIVER_BY_TEAM_REQUEST:
-      return {
-        ...state,
-        error: null,
-      };
-
-    case SEARCH_DRIVER_BY_TEAM_SUCCESS:
-      const { team, drivers } = action.payload;
-      return {
-        ...state,
-        teams: {
-          ...state.teams,
-          [team]: drivers,
-        },
-      };
-
-    case SEARCH_DRIVER_BY_TEAM_FAILURE:
-      return {
-        ...state,
-        error: action.payload,
-      };
-
-    case RESET_DRIVERS:
-      return {
-        ...state,
-        drivers: initialState.drivers,
-        searchedDriver: initialState.searchedDriver,
-      };
-
-    case SEARCH_DRIVER_BY_NAME_REQUEST:
-      return {
-        ...state,
-        loading: true,
-        error: null,
-      };
-
-    case SEARCH_DRIVER_BY_NAME_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        drivers: action.payload,
-        error: null,
-      };
-
-    case SEARCH_DRIVER_BY_NAME_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        drivers: [],
-        error: action.payload,
-      };
-
-    default:
-      return state;
-  }
+      }
+    } catch (error) {
+      // Si ocurre un error durante la búsqueda, dispara la acción para indicar que la búsqueda ha fallado
+      dispatch(searchDriverByNameFailure(error.message));
+    }
+  };
 };
 
-export default driverReducer;
+export const createDriverRequest = () => ({
+  type: CREATE_DRIVER_REQUEST,
+});
+
+export const createDriverSuccess = (driver) => ({
+  type: CREATE_DRIVER_SUCCESS,
+  payload: driver,
+});
+
+export const createDriverFailure = (error) => ({
+  type: CREATE_DRIVER_FAILURE,
+  payload: error,
+});
+
+export const createDriver = (driverData) => {
+  return async (dispatch) => {
+    dispatch(createDriverRequest());
+
+    try {
+      const response = await axios.post(
+        "https://pif1-production.up.railway.app/drivers",
+        driverData
+      );
+      console.log("API Response for createDriver action:", response.data);
+
+      dispatch(createDriverSuccess(response.data));
+      return response.data;
+    } catch (error) {
+      dispatch(createDriverFailure(error.message));
+      throw error;
+    }
+  };
+};
+
+export const setSelectedDriver = (driver) => ({
+  type: SET_SELECTED_DRIVER,
+  payload: driver,
+});
+
+export const toggleSortOrder = () => ({
+  type: TOGGLE_SORT_ORDER,
+});
+
+export const searchDriverByTeamRequest = () => ({
+  type: SEARCH_DRIVER_BY_TEAM_REQUEST,
+});
+
+export const searchDriverByTeamSuccess = (drivers) => ({
+  type: SEARCH_DRIVER_BY_TEAM_SUCCESS,
+  payload: drivers,
+});
+
+export const searchDriversByTeamAction = (team, drivers) => ({
+  type: FETCH_DRIVERS_SUCCESS,
+  payload: { team, drivers },
+});
+
+export const searchDriverByTeamFailure = (error) => ({
+  type: SEARCH_DRIVER_BY_TEAM_FAILURE,
+  payload: error,
+});
+
+export const resetDrivers = () => ({
+  type: RESET_DRIVERS,
+});
