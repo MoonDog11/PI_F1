@@ -85,10 +85,8 @@ const getAllDriversController = async (req, res) => {
 
 const getDriverByNameController = async (req, res) => {
   try {
-    const { name } = req.params; // Obtener el parámetro de la ruta
-    const url = `https://pif1-production.up.railway.app/drivers/name/${encodeURIComponent(name)}`;
-    const response = await axios.get(url);
-    const drivers = response.data;
+    const { name } = req.params;
+    const drivers = await getDriverByNameHandler(name);
     res.json(drivers);
   } catch (error) {
     console.error('Error en la búsqueda de conductores:', error);
