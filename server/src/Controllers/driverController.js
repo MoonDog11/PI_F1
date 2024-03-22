@@ -84,21 +84,27 @@ const getAllDriversController = async (req, res) => {
 };
 
 const getDriverByNameController = async (req, res) => {
+  const { firstName, lastName } = req.query;
+  const apiUrl = 'https://pif1-production.up.railway.app/drivers';
+
   try {
-    const { name } = req.query; // Obtenemos el nombre del conductor del query
-    const url = `https://pif1-production.up.railway.app/drivers?name=${name}`; // Modificamos la URL para incluir el query
+    const response = await axios.get(apiUrl);
+    const drivers = response.data;
 
-    console.log("URL de la solicitud al servidor:", url);
+    // Filtrar conductores por nombre y/o apellido
+    let filteredDrivers = drivers;
 
-    const response = await axios.get(url);
+    if (firstName) {
+      filteredDrivers = filteredDrivers.filter(driver => driver.name.forename === firstName);
+    }
 
-    console.log("Respuesta del servidor:", response.data);
+    if (lastName) {
+      filteredDrivers = filteredDrivers.filter(driver => driver.name.surname === lastName);
+    }
 
-    // Devolvemos la respuesta del servidor
-    res.json(response.data);
+    res.json(filteredDrivers);
   } catch (error) {
-    console.error('Error en la búsqueda de conductores:', error);
-    res.status(500).json({ error: 'Error en la búsqueda de conductores' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
