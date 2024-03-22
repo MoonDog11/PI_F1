@@ -156,7 +156,59 @@ export const createDriver = (driverData) => {
     }
   };
 };
+export const createDriverRequest = () => {
+  return {
+    type: CREATE_DRIVER_REQUEST,
+  };
+};
 
+export const createDriverSuccess = (driver) => {
+  return {
+    type: CREATE_DRIVER_SUCCESS,
+    payload: driver,
+  };
+};
+
+export const createDriverFailure = (error) => {
+  return {
+    type: CREATE_DRIVER_FAILURE,
+    payload: error,
+  };
+};
+
+export const setDrivers = (drivers) => ({
+  type: "SET_DRIVERS",
+  payload: drivers,
+});
+
+export const getDriverByIdSuccess = (driver) => {
+  return {
+    type: "GET_DRIVER_BY_ID_SUCCESS",
+    payload: driver,
+  };
+};
+
+export const getDriverByIdFailure = (error) => {
+  return {
+    type: "GET_DRIVER_BY_ID_FAILURE",
+    payload: error,
+  };
+};
+
+export const getDriverById = (id) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `https://pif1-production.up.railway.app/drivers/${id}`
+      );
+      const driver = response.data;
+
+      dispatch(getDriverByIdSuccess(driver));
+    } catch (error) {
+      dispatch(getDriverByIdFailure(error));
+    }
+  };
+};
 export const setSelectedDriver = (driver) => ({
   type: SET_SELECTED_DRIVER,
   payload: driver,
