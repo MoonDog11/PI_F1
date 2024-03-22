@@ -45,8 +45,8 @@ const getDriverByNameHandler = async (name) => {
 
     console.log("API URL:", url);
 
-    const response = await fetch(url);
-    const data = await response.json();
+    const response = await axios.get(url);
+    const data = response.data;
 
     console.log("API Response inside action:", data);
 
