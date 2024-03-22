@@ -87,13 +87,7 @@ const getDriverByNameController = async (req, res) => {
   try {
     const { name } = req.params;
     const drivers = await getDriverByNameHandler(name);
-    
-    // Verificar si la respuesta es un objeto JSON válido
-    if (typeof drivers === 'object' && drivers !== null) {
-      res.json(drivers);
-    } else {
-      throw new Error('La respuesta no es un objeto JSON válido');
-    }
+    res.json(drivers); // Enviar la respuesta como JSON
   } catch (error) {
     console.error('Error en la búsqueda de conductores:', error);
     res.status(500).json({ error: 'Error en la búsqueda de conductores' });
