@@ -14,10 +14,23 @@ const SearchBar = () => {
     setSearchQuery(event.target.value);
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    dispatch(searchDriverByName(searchQuery)); // Despachando la acción de búsqueda
-  };
+ const handleSearch = async (e) => {
+  if (e) {
+    e.preventDefault(); 
+  }
+
+  console.log('Search query:', searchQuery);
+
+  try {
+    // Realiza la búsqueda y obtén los resultados
+    const results = await dispatch(searchDriverByName(searchQuery));
+    console.log('Search results:', results);
+    // Actualiza el estado searchResults con los resultados de la búsqueda
+    setSearchResults(results); // Aquí actualizas el estado searchResults
+  } catch (error) {
+    console.error('Error en la búsqueda:', error);
+  }
+};
 
   useEffect(() => {
     // Si hay resultados de búsqueda, se actualizará automáticamente
