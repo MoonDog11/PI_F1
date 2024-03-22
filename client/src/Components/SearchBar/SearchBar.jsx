@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { searchDriverByName } from '../../Redux/Actions';
 import './SearchBar.css';
 import Card from '../Card/Card'; 
@@ -8,33 +8,42 @@ const SearchBar = () => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = async (e) => {
-    if (e) {
-      e.preventDefault(); 
-    }
+  const handleChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
-    console.log('Search query:', searchQuery);
-
+  const handleSearch = async () => {
     try {
-      const results = await dispatch(searchDriverByName(searchQuery));
-      console.log('Search results:', results);
+      setIsLoading(true); // Inicia el estado de carga
+
+      // Realiza la búsqueda solo si hay un valor en searchQuery
+      if (searchQuery.trim() !== '') {
+        const results = await dispatch(searchDriverByName(searchQuery));
+        setSearchResults(results);
+      }
     } catch (error) {
       console.error('Error en la búsqueda:', error);
+    } finally {
+      setIsLoading(false); // Detiene el estado de carga
     }
   };
 
-  useEffect(() => {
-    if (searchQuery !== '') {
-      handleSearch(); // Realiza la búsqueda cuando searchQuery cambie
-    } else {
-      setSearchResults([]); // Restablece los resultados de la búsqueda si searchQuery está vacío
+  const handleKeypress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
     }
-  }, [searchQuery]); // Ejecuta el efecto cuando searchQuery cambie
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleSearch();
+  };
 
   return (
     <div className="driver-form-container-2">
-      <form onSubmit={e => e.preventDefault()}>
+      <form onSubmit={handleSubmit}>
         <h1 className="driver-finder-title">Driver Finder</h1>
         <div className="search-bar-container">
           <input
@@ -42,10 +51,11 @@ const SearchBar = () => {
             type="text"
             placeholder="Search by name"
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={handleChange}
+            onKeyPress={handleKeypress} // Realiza la búsqueda al presionar Enter
           />
-          <button type="submit" className="submit" onClick={handleSearch}>
-            <span className="button-text">Search</span>
+          <button type="submit" className="submit" disabled={isLoading}>
+            {isLoading ? 'Searching...' : 'Search'} {/* Cambia el texto del botón según isLoading */}
           </button>
         </div>
       </form>
