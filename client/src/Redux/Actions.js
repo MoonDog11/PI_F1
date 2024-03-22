@@ -149,8 +149,8 @@ export const searchDriverByName = (name) => {
       const response = await axios.get(url);
       const data = response.data;
 
-      // Si se encuentran conductores, dispara la acción para indicar el éxito de la búsqueda
-      if (data.length > 0) {
+      // Verifica si data está definido y si tiene una longitud mayor que cero
+      if (data && data.length > 0) {
         dispatch(searchDriverByNameSuccess(data)); // Despacha la acción de éxito con los datos de los conductores
       } else {
         // Si no se encuentran conductores por nombre, intenta buscar por apellido
@@ -158,8 +158,8 @@ export const searchDriverByName = (name) => {
         const surnameResponse = await axios.get(surnameUrl);
         const surnameData = surnameResponse.data;
 
-        // Si se encuentran conductores por apellido, dispara la acción para indicar el éxito de la búsqueda
-        if (surnameData.length > 0) {
+        // Verifica si surnameData está definido y si tiene una longitud mayor que cero
+        if (surnameData && surnameData.length > 0) {
           dispatch(searchDriverByNameSuccess(surnameData)); // Despacha la acción de éxito con los datos de los conductores por apellido
         } else {
           // Si no se encuentran conductores por apellido, dispara la acción para indicar que la búsqueda ha fallado
