@@ -37,20 +37,23 @@ const getDriverByIdHandler = async (idDriver) => {
   }
 };
 
-const getDriverByNameController = async (req, res) => {
+const getDriverByNameHandler = async (name) => {
   try {
-    const { name } = req.params;
-    const drivers = await getDriverByNameHandler(name);
-    
-    // Verificar si la respuesta es un objeto JSON válido
-    if (typeof drivers === 'object' && drivers !== null) {
-      res.json(drivers);
-    } else {
-      throw new Error('La respuesta no es un objeto JSON válido');
-    }
+    console.log("Searching for driver in the database with name:", name);
+
+    const url = `https://pif1-production.up.railway.app/drivers/name/${name}`;
+
+    console.log("API URL:", url);
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    console.log("API Response inside action:", data);
+
+    return data;
   } catch (error) {
-    console.error('Error en la búsqueda de conductores:', error);
-    res.status(500).json({ error: 'Error en la búsqueda de conductores' });
+    console.error("Error al buscar conductores por nombre:", error);
+    throw error;
   }
 };
 
