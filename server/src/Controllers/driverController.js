@@ -86,8 +86,17 @@ const getAllDriversController = async (req, res) => {
 const getDriverByNameController = async (req, res) => {
   try {
     const { name } = req.params;
-    const drivers = await getDriverByNameHandler(name);
-    res.json(drivers); // Enviar la respuesta como JSON
+    const url = `https://pif1-production.up.railway.app/drivers/name/${name}`;
+    
+    console.log("URL de la solicitud al servidor:", url);
+
+    const response = await axios.get(url);
+    
+    console.log("Respuesta del servidor:", response.data);
+
+    // Ahora intenta analizar la respuesta como JSON
+    const drivers = response.data;
+    res.json(drivers);
   } catch (error) {
     console.error('Error en la búsqueda de conductores:', error);
     res.status(500).json({ error: 'Error en la búsqueda de conductores' });
