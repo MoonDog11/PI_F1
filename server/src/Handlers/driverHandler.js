@@ -41,10 +41,12 @@ const getDriverByNameHandler = async (name) => {
   try {
     console.log("Searching for driver in the database with name:", name);
 
-    const url = `https://pif1-production.up.railway.app/drivers?name=${name}`; // Usando query en la URL
-    
+    // Construimos la URL de la API utilizando el nombre como query
+    const url = `https://pif1-production.up.railway.app/drivers?name=${name}`;
+
     console.log("API URL:", url);
 
+    // Realizamos la solicitud a la API
     const response = await fetch(url);
     const data = await response.json();
 
@@ -56,6 +58,8 @@ const getDriverByNameHandler = async (name) => {
     throw error;
   }
 };
+
+module.exports = { getDriverByNameHandler };
 const searchDriversByTeamHandler = async (team) => {
   try {
     // Aquí puedes realizar cualquier manipulación o procesamiento adicional de los conductores si es necesario
