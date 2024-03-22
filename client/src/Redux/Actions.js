@@ -57,54 +57,44 @@ export const clearSearchError = () => {
   };
 };
 
-export const fetchDriversSuccess = (data) => {
-  return async (dispatch) => {
-    try {
-      const teams = {};
-      const allDrivers = [];
-      const uniqueTeamSet = new Set();
+case FETCH_DRIVERS_SUCCESS:
+  const teams = {};
+  const allDrivers = [];
+  const uniqueTeamSet = new Set();
 
-      if (Array.isArray(data)) {
-        data.forEach((driver) => {
-          if (typeof driver.teams === "string") {
-            const teamsList = driver.teams.split(",");
-            teamsList.forEach((team) => {
-              const teamName = team.trim() || "Unknown Team";
-              if (!uniqueTeamSet.has(teamName)) {
-                uniqueTeamSet.add(teamName);
-                teams[teamName] = [];
-              }
-              teams[teamName].push(driver);
-            });
-          } else {
-            const teamName = "Unknown Team";
-            if (!uniqueTeamSet.has(teamName)) {
-              uniqueTeamSet.add(teamName);
-              teams[teamName] = [];
-            }
-            teams[teamName].push(driver);
-          }
-          allDrivers.push(driver);
-        });
-      }
-
-      const uniqueTeamNames = Array.from(uniqueTeamSet);
-
-      console.log("Equipos:", teams);
-
-      dispatch({
-        type: FETCH_DRIVERS_SUCCESS,
-        payload: {
-          drivers: allDrivers,
-          teams: teams,
-          teamNames: uniqueTeamNames,
-        },
+  action.payload.forEach((driver) => {
+    if (typeof driver.teams === "string") {
+      const teamsList = driver.teams.split(",");
+      teamsList.forEach((team) => {
+        const teamName = team.trim() || "Unknown Team";
+        if (!uniqueTeamSet.has(teamName)) {
+          uniqueTeamSet.add(teamName);
+          teams[teamName] = [];
+        }
+        teams[teamName].push(driver);
       });
-    } catch (error) {
-      console.error("Error en fetchDrivers:", error.message);
+    } else {
+      const teamName = "Unknown Team";
+      if (!uniqueTeamSet.has(teamName)) {
+        uniqueTeamSet.add(teamName);
+        teams[teamName] = [];
+      }
+      teams[teamName].push(driver);
     }
+    allDrivers.push(driver);
+  });
+
+  const uniqueTeamNames = Array.from(uniqueTeamSet);
+
+  return {
+    ...state,
+    loading: false,
+    drivers: allDrivers,
+    teams: teams,
+    teamNames: uniqueTeamNames,
+    newDriver: action.payload,
+    searchedDriver: action.payload,
   };
-};
 
 export const fetchDriversFailure = (error) => {
   return {
