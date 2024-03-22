@@ -15,6 +15,9 @@ import {
   SEARCH_DRIVER_BY_TEAM_SUCCESS,
   SEARCH_DRIVER_BY_TEAM_FAILURE,
   RESET_DRIVERS,
+  SEARCH_DRIVER_BY_NAME_REQUEST,
+  SEARCH_DRIVER_BY_NAME_SUCCESS,
+  SEARCH_DRIVER_BY_NAME_FAILURE,
   // Agrega las nuevas acciones aquí según sea necesario
 } from "./Actions";
 
@@ -161,6 +164,30 @@ const driverReducer = (state = initialState, action) => {
         drivers: initialState.drivers,
         searchedDriver: initialState.searchedDriver,
       };
+
+      case SEARCH_DRIVER_BY_NAME_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+
+    case SEARCH_DRIVER_BY_NAME_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        drivers: action.payload,
+        error: null,
+      };
+
+    case SEARCH_DRIVER_BY_NAME_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        drivers: [],
+        error: action.payload,
+      };
+
 
     default:
       return state;
