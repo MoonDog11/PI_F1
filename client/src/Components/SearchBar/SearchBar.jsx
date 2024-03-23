@@ -48,6 +48,7 @@ const SearchBar = () => {
         </div>
       </form>
 
+      {/* Solo muestra las tarjetas si hay resultados de búsqueda */}
       {searchResults.length > 0 && (
         <div>
           <h2>Search Results</h2>
