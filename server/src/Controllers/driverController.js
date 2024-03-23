@@ -168,34 +168,36 @@ const getAllDriversFromRailwayController = async (req, res) => {
 };
 
 const createDriverController = async (req, res) => {
-  const { name, teams } = req.body;
-
-  // Verifica si se proporcionaron los datos necesarios
-  if (!name || !teams || teams.length === 0) {
-    return res
-      .status(400)
-      .json({ error: "Nombre y al menos un equipo son obligatorios." });
-  }
-
   try {
-    // Crea el nuevo conductor en la base de datos
-    const newDriver = await Driver.create({ name });
+    // Obtener los datos del cuerpo de la solicitud
+    const { Name, LastName, Nationality, ImageURL, Birthdate, Description, Teams } = req.body;
 
-    // Relaciona el conductor con los equipos indicados
-    await newDriver.addTeams(teams);
+    // Verificar que se proporcionaron todos los datos necesarios
+    if (!Name || !LastName || !Nationality || !ImageURL || !Birthdate || !Description || !Teams) {
+      return res.status(400).json({ error: "Todos los campos son obligatorios." });
+    }
 
-    // Recarga el conductor con los equipos relacionados
-    const driverWithTeams = await Driver.findByPk(newDriver.id, {
-      include: Team,
-    });
+    // Convertir la cadena de equipos separados por comas en un array
+    const teams = Teams.split(',').map(team => team.trim());
 
-    // Envía una respuesta exitosa con el conductor y los equipos relacionados
-    res.status(201).json({
-      message: "Conductor creado exitosamente",
-      driver: driverWithTeams,
-    });
+    // Crear el objeto de datos del conductor
+    const driverData = {
+      name: Name,
+      last_name: LastName,
+      nationality: Nationality,
+      image_url: ImageURL,
+      birthdate: Birthdate,
+      description: Description,
+      teams: teams
+    };
+
+    // Realizar la solicitud POST para crear el conductor en la API
+    const response = await axios.post('https://pif1-production.up.railway.app/drivers', driverData);
+
+    // Devolver la respuesta de la API al cliente
+    res.status(201).json(response.data);
   } catch (error) {
-    console.error("Error al crear el conductor:", error);
+    console.error('Error al crear el conductor:', error.message);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
