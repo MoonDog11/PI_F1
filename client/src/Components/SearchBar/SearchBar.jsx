@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux'; // Importa useSelector para acceder al estado global
-import { searchDriverByName } from '../../Redux/Actions'; // Asegúrate de que la ruta sea correcta
+import { useDispatch, useSelector } from 'react-redux';
+import { searchDriverByName } from '../../Redux/Actions';
 import './SearchBar.css';
 import Card from '../Card/Card'; 
 
 const SearchBar = () => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
-  const searchResults = useSelector(state => state.searchedDriver); // Accede al estado global para obtener los resultados de la búsqueda
+  const searchResults = useSelector(state => state.searchedDriver);
 
   const handleChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
   const handleSearch = async (e) => {
-    e.preventDefault(); // Evita que el formulario se envíe automáticamente
+    e.preventDefault(); 
 
     try {
-      // Realiza la búsqueda y obtén los resultados
       await dispatch(searchDriverByName(searchQuery));
     } catch (error) {
       console.error('Error en la búsqueda:', error);
@@ -49,7 +48,6 @@ const SearchBar = () => {
         </div>
       </form>
 
-     {/* Muestra las tarjetas de los conductores en la interfaz de usuario */}
       {searchResults.length > 0 && (
         <div>
           <h2>Search Results</h2>
