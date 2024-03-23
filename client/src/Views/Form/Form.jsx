@@ -30,35 +30,36 @@ const DriverForm = () => {
     }
   }, [searchError, dispatch]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validaciones básicas (puedes ajustar según necesites)
-    if (!name || !lastName || !nationality || !birthdate || teams.length === 0) {
-      alert('Por favor, completa todos los campos obligatorios.');
-      return;
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  // Validaciones básicas (puedes ajustar según necesites)
+  if (!name || !lastName || !nationality || !birthdate || teams.length === 0) {
+    alert('Por favor, completa todos los campos obligatorios.');
+    return;
+  }
 
-    // Otras validaciones según tus requisitos (ejemplo: verificar formato de fecha, etc.)
+  // Otras validaciones según tus requisitos (ejemplo: verificar formato de fecha, etc.)
 
-    console.log('Form submitted!');
-    console.log('Name:', name);
-    console.log('Last Name:', lastName);
-    console.log('Nationality:', nationality);
-    console.log('Image:', image);
-    console.log('Birthdate:', birthdate);
-    console.log('Description:', description);
-    console.log('Teams:', teams);
+  console.log('Form submitted!');
+  console.log('Name:', name);
+  console.log('Last Name:', lastName);
+  console.log('Nationality:', nationality);
+  console.log('Image:', image);
+  console.log('Birthdate:', birthdate);
+  console.log('Description:', description);
+  console.log('Teams:', teams);
 
-    try {
-      await dispatch(createDriver({ name, lastName, nationality, image, birthdate, description, teams }));
-      setSuccessMessage('Successfully created a new driver.');
-    } catch (error) {
-      console.error('Error creating driver:', error);
-      alert('Error creating driver. Please try again.');
-    }
-  };
-
+  try {
+    console.log('Sending request to create driver...');
+    await dispatch(createDriver({ name, lastName, nationality, image, birthdate, description, teams }));
+    console.log('Driver created successfully.');
+    setSuccessMessage('Successfully created a new driver.');
+  } catch (error) {
+    console.error('Error creating driver:', error);
+    alert('Error creating driver. Please try again.');
+  }
+};
   return (
     <div className="page-container">
       <Navbar />
