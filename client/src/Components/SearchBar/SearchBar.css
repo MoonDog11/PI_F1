@@ -1,6 +1,8 @@
-/* DriverForm.css */
-
-/* Estilos específicos para el formulario de conductor */
+.card-container {
+  display: flex;
+  justify-content: center; /* Centra las tarjetas horizontalmente */
+  flex-wrap: wrap; /* Permite que las tarjetas se envuelvan en dispositivos pequeños */
+}
 .driver-form-container-2 {
     background-image: url('./abstract-316425_640.jpeg');
     max-width: 2000px;
