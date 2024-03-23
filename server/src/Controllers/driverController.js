@@ -175,10 +175,7 @@ const createDriverController = async (req, res) => {
     }
 
     // Construye un objeto driverData dinámicamente utilizando los datos del cuerpo de la solicitud
-    const driverData = {};
-    for (const key in req.body) {
-      driverData[key] = req.body[key];
-    }
+    const driverData = req.body;
 
     // Realiza la solicitud POST para crear el conductor en la base de datos
     // Aquí iría tu lógica para guardar los datos en la base de datos
@@ -190,7 +187,6 @@ const createDriverController = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
-
 module.exports = {
   createDriverController,
   getAllDriversFromRailwayController,
