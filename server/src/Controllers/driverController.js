@@ -169,6 +169,9 @@ const getAllDriversFromRailwayController = async (req, res) => {
 
 const createDriverController = async (req, res) => {
   try {
+    
+    console.log('Body de la solicitud:', req.body);
+
     // Obtener los datos del cuerpo de la solicitud
     const { Name, LastName, Nationality, ImageURL, Birthdate, Description, Teams } = req.body;
 
