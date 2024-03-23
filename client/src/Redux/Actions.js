@@ -169,13 +169,16 @@ export const createDriver = (driverData) => {
         'https://pif1-production.up.railway.app/drivers',
         driverData
       );
-      console.log('API Response for createDriver action:', response.data);
+
+      // Mensaje de éxito
+      const successMessage = '¡El conductor fue creado exitosamente!';
+      console.log(successMessage);
 
       // Aquí puedes despachar alguna acción en caso de éxito si lo deseas
       // Por ejemplo:
       // dispatch(createDriverSuccess(response.data));
       
-      return response.data;
+      return successMessage;
     } catch (error) {
       console.error('Error creating driver:', error.message);
       // Aquí puedes despachar alguna acción en caso de error si lo deseas
