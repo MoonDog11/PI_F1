@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser'); // Middleware de análisis de cuerpo de solicitud
 const cors = require('cors');
 const morgan = require('morgan');
 const router = require('./router');
@@ -7,13 +6,9 @@ const router = require('./router');
 const server = express();
 
 server.use(morgan('dev'));
-server.use(express.json()); 
+server.use(express.json());
 
-// Middleware de análisis de cuerpo de solicitud para una ruta específica
-const jsonParserMiddleware = bodyParser.json();
-server.use('/drivers', jsonParserMiddleware);
-
-// Middleware CORS global
+// Configuración global de CORS
 server.use(cors({
   origin: 'https://pi-f1.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
