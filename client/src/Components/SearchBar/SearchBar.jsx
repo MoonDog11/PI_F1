@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { searchDriverByName } from '../../Redux/Actions';
 import './SearchBar.css';
-import Card from '../Card/Card'; 
 
 const SearchBar = () => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
-  const searchResults = useSelector(state => state.searchedDriver);
 
   const handleChange = (event) => {
     setSearchQuery(event.target.value);
@@ -47,18 +45,6 @@ const SearchBar = () => {
           </button>
         </div>
       </form>
-
-      {/* Solo muestra las tarjetas si hay resultados de búsqueda */}
-      {searchResults && searchResults.length > 0 && (
-        <div>
-          <h2>Search Results</h2>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {searchResults.map(driver => (
-              <Card key={driver.id} driver={driver} />
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
