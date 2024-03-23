@@ -170,15 +170,28 @@ const getAllDriversFromRailwayController = async (req, res) => {
 const createDriverController = async (req, res) => {
   try {
     // Obtener los datos del cuerpo de la solicitud
-    const driverData = req.body;
+    const { name, lastName, nationality, birthdate, description, teams } = req.body;
 
-    // Verificar que se proporcionaron algunos datos en el cuerpo de la solicitud
-    if (!driverData || Object.keys(driverData).length === 0) {
-      return res.status(400).json({ error: "No se proporcionaron datos en el cuerpo de la solicitud." });
+    // Verificar que se proporcionaron todos los datos necesarios
+    if (!name || !lastName || !nationality || !birthdate || !description || !teams) {
+      return res.status(400).json({ error: "Todos los campos son obligatorios." });
     }
 
+    // Convertir la cadena de equipos separados por comas en un array
+    const teamsArray = teams.split(',').map(team => team.trim());
+
+    // Crear el objeto de datos del conductor
+    const driverData = {
+      name,
+      last_name: lastName,
+      nationality,
+      birthdate,
+      description,
+      teams: teamsArray
+    };
+
     // Realizar la solicitud POST para crear el conductor en la API
-    const response = await axios.post('https://pif1-production.up.railway.app/drivers', driverData);
+    const response = await axios.post('https://pif1-production.up.railway.app/drivers/create', driverData);
 
     // Devolver la respuesta de la API al cliente
     res.status(201).json(response.data);
