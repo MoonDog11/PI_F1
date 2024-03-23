@@ -9,9 +9,11 @@ const { PORT } = process.env;
 const app = express();
 
 // Aplica el middleware CORS solo a las rutas relacionadas con los conductores
-app.use('/drivers', cors()); // Esto asegura que el middleware CORS solo se aplique a las rutas relacionadas con los conductores
+// app.use('/drivers', cors()); // Elimina esto
+
+app.use(express.json()); // Mueve esto arriba de app.use(driverRoutes)
+
 app.use(driverRoutes);
-app.use(express.json());
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
@@ -20,4 +22,3 @@ app.listen(PORT, () => {
 conn.sync({ alter: true })
   .then(() => console.log('Database synchronized successfully'))
   .catch((error) => console.error('Error synchronizing database:', error));
-
