@@ -164,19 +164,23 @@ export const searchDriverByName = (name) => {
 
 export const createDriver = (driverData) => {
   return async (dispatch) => {
-    dispatch(createDriverRequest());
-
     try {
       const response = await axios.post(
-        "https://pif1-production.up.railway.app/drivers",
+        'https://pif1-production.up.railway.app/drivers',
         driverData
       );
-      console.log("API Response for createDriver action:", response.data);
+      console.log('API Response for createDriver action:', response.data);
 
-      dispatch(createDriverSuccess(response.data));
+      // Aquí puedes despachar alguna acción en caso de éxito si lo deseas
+      // Por ejemplo:
+      // dispatch(createDriverSuccess(response.data));
+      
       return response.data;
     } catch (error) {
-      dispatch(createDriverFailure(error.message));
+      console.error('Error creating driver:', error.message);
+      // Aquí puedes despachar alguna acción en caso de error si lo deseas
+      // Por ejemplo:
+      // dispatch(createDriverFailure(error.message));
       throw error;
     }
   };
