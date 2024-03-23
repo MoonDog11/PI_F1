@@ -169,8 +169,10 @@ const getAllDriversFromRailwayController = async (req, res) => {
 
 const createDriverController = async (req, res) => {
   try {
-    
-    console.log('Body de la solicitud:', req.body);
+    // Verificar si req.body está definido
+    if (!req.body) {
+      return res.status(400).json({ error: "No se proporcionó ningún cuerpo de solicitud." });
+    }
 
     // Obtener los datos del cuerpo de la solicitud
     const { Name, LastName, Nationality, ImageURL, Birthdate, Description, Teams } = req.body;
@@ -191,7 +193,7 @@ const createDriverController = async (req, res) => {
       image_url: ImageURL,
       birthdate: Birthdate,
       description: Description,
-      teams: teams,
+      teams: teams
     };
 
     // Realizar la solicitud POST para crear el conductor en la API
