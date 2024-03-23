@@ -11,6 +11,7 @@ const app = express();
 // Aplica el middleware CORS solo a las rutas relacionadas con los conductores
 app.use('/drivers', cors()); // Esto asegura que el middleware CORS solo se aplique a las rutas relacionadas con los conductores
 app.use(driverRoutes);
+app.use(express.json());
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
