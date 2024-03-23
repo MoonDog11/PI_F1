@@ -49,7 +49,7 @@ const SearchBar = () => {
       </form>
 
       {/* Solo muestra las tarjetas si hay resultados de búsqueda */}
-      {searchResults.length > 0 && (
+      {searchResults && searchResults.length > 0 && (
         <div>
           <h2>Search Results</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
