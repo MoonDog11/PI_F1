@@ -7,6 +7,7 @@ const router = require('./router');
 const server = express();
 
 server.use(morgan('dev'));
+server.use(express.json()); 
 
 // Middleware de análisis de cuerpo de solicitud para una ruta específica
 const jsonParserMiddleware = bodyParser.json();
