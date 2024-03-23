@@ -59,6 +59,7 @@ const driverReducer = (state = initialState, action) => {
         teams: teams,
         teamNames: teamNames,
         newDriver: action.payload,
+        searchedDriver: action.payload.drivers,
       };
 
     case CREATE_DRIVER_SUCCESS:
