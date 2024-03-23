@@ -17,53 +17,37 @@ const DriverForm = () => {
   const [successMessage, setSuccessMessage] = useState('');
   
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const searchError = useSelector((state) => state.searchError);
 
-  useEffect(() => {
-    if (searchError) {
-      const timeoutId = setTimeout(() => {
-        dispatch(clearSearchError());
-      }, 3000);
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [searchError, dispatch]);
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
   
-  // Validaciones básicas (puedes ajustar según necesites)
-  if (!name || !lastName || !nationality || !birthdate || teams.length === 0) {
-    alert('Por favor, completa todos los campos obligatorios.');
-    return;
-  }
+    // Validaciones básicas
+    if (!name || !lastName || !nationality || !birthdate || teams.length === 0) {
+      alert('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
 
-  // Otras validaciones según tus requisitos (ejemplo: verificar formato de fecha, etc.)
+    try {
+      await dispatch(createDriver({ name, lastName, nationality, image, birthdate, description, teams }));
+      setSuccessMessage('Conductor creado exitosamente.');
+      // Limpiar el formulario después de enviar los datos
+      setName('');
+      setLastName('');
+      setNationality('');
+      setImage('');
+      setBirthdate('');
+      setDescription('');
+      setTeams([]);
+    } catch (error) {
+      console.error('Error al crear el conductor:', error);
+      alert('Error al crear el conductor. Por favor, intenta nuevamente.');
+    }
+  };
 
-  console.log('Form submitted!');
-  console.log('Name:', name);
-  console.log('Last Name:', lastName);
-  console.log('Nationality:', nationality);
-  console.log('Image:', image);
-  console.log('Birthdate:', birthdate);
-  console.log('Description:', description);
-  console.log('Teams:', teams);
-
-  try {
-    console.log('Sending request to create driver...');
-    await dispatch(createDriver({ name, lastName, nationality, image, birthdate, description, teams }));
-    console.log('Driver created successfully.');
-    setSuccessMessage('Successfully created a new driver.');
-  } catch (error) {
-    console.error('Error creating driver:', error);
-    alert('Error creating driver. Please try again.');
-  }
-};
   return (
     <div className="page-container">
       <Navbar />
-      <div className="driver-form-container" style={{ backgroundImage: `url(${fondoImage})` }}>
+      <div className="driver-form-container">
         <h2>New Driver</h2>
         <form onSubmit={handleSubmit} className="driver-form">
           <label>
