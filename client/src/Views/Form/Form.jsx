@@ -47,7 +47,7 @@ const DriverForm = () => {
   return (
     <div className="page-container">
       <Navbar />
-      <div className="driver-form-container">
+      <div className="driver-form-container" style={{ backgroundImage: `url(${fondoImage})` }}>
         <h2>New Driver</h2>
         <form onSubmit={handleSubmit} className="driver-form">
           <label>
