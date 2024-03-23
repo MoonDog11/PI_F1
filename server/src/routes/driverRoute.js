@@ -13,6 +13,6 @@ router.get("/drivers", getAllDriversController);
 router.get("/drivers/search", getDriverByNameController);
 router.get("/drivers/id/:idDriver", getDriverByIdController);
 router.get("/drivers/local", getAllDriversFromRailwayController);
-router.post("/drivers/:driverId/resource", createDriverController);
+router.post("/drivers", createDriverController);
 
 module.exports = router;
