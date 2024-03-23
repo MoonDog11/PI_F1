@@ -180,13 +180,15 @@ const createDriverController = async (req, res) => {
     // Realiza la solicitud POST para crear el conductor en la base de datos
     // Aquí iría tu lógica para guardar los datos en la base de datos
 
-    // Envía una respuesta con los datos del conductor creado
-    res.status(201).json({ message: "Conductor creado exitosamente", data: driverData });
+    // Envía una respuesta con los datos del conductor creado y un mensaje de éxito
+    const successMessage = "¡Conductor creado exitosamente!";
+    res.status(201).json({ message: successMessage, data: driverData });
   } catch (error) {
     console.error('Error al crear el conductor:', error.message);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+
 module.exports = {
   createDriverController,
   getAllDriversFromRailwayController,
