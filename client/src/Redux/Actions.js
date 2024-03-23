@@ -166,7 +166,7 @@ export const createDriver = (driverData) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        'https://pif1-production.up.railway.app/drivers',
+        'https://pif1-production.up.railway.app/drivers/create',
         driverData
       );
       console.log('API Response for createDriver action:', response.data);
