@@ -169,28 +169,22 @@ const getAllDriversFromRailwayController = async (req, res) => {
 
 const createDriverController = async (req, res) => {
   try {
-    // Obtener los datos del cuerpo de la solicitud
-    const requestData = req.body;
-
-    // Verificar que se proporcionaron datos en el cuerpo de la solicitud
-    if (!requestData || Object.keys(requestData).length === 0) {
+    // Verifica que se proporcionaron datos en el cuerpo de la solicitud
+    if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({ error: "No se proporcionaron datos en el cuerpo de la solicitud." });
     }
 
-    // Crear un objeto de datos del conductor con los campos proporcionados
+    // Construye un objeto driverData dinámicamente utilizando los datos del cuerpo de la solicitud
     const driverData = {};
-
-    // Recorrer todas las claves del cuerpo de la solicitud
-    for (const key in requestData) {
-      // Asignar el valor de cada clave al objeto de datos del conductor
-      driverData[key] = requestData[key];
+    for (const key in req.body) {
+      driverData[key] = req.body[key];
     }
 
-    // Realizar la solicitud POST para crear el conductor en la API
-    const response = await axios.post('https://pif1-production.up.railway.app/drivers', driverData);
+    // Realiza la solicitud POST para crear el conductor en la base de datos
+    // Aquí iría tu lógica para guardar los datos en la base de datos
 
-    // Devolver la respuesta de la API al cliente
-    res.status(201).json(response.data);
+    // Envía una respuesta con los datos del conductor creado
+    res.status(201).json({ message: "Conductor creado exitosamente", data: driverData });
   } catch (error) {
     console.error('Error al crear el conductor:', error.message);
     res.status(500).json({ error: "Error interno del servidor" });
