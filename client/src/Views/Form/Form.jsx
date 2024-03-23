@@ -15,22 +15,10 @@ const DriverForm = () => {
   const [description, setDescription] = useState('');
   const [teams, setTeams] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-
+  
   const dispatch = useDispatch();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    try {
-      const response = await dispatch(createDriver({ name, lastName, nationality, image, birthdate, description, teams }));
-      setSuccessMessage(response.message);
-    } catch (error) {
-      console.error('Error creating driver:', error);
-      setErrorMessage('Error creating driver. Please try again.');
-    }
-  };
-
+  const navigate = useNavigate();
+  const searchError = useSelector((state) => state.searchError);
 
   useEffect(() => {
     if (searchError) {
@@ -121,5 +109,3 @@ const DriverForm = () => {
     </div>
   );
 }
-
-export default DriverForm;
