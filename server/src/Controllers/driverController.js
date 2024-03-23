@@ -188,7 +188,7 @@ const createDriverController = async (req, res) => {
       image_url: ImageURL,
       birthdate: Birthdate,
       description: Description,
-      teams: teams
+      teams: teams,
     };
 
     // Realizar la solicitud POST para crear el conductor en la API
