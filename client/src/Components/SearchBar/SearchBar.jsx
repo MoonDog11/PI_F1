@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'; // Importa useSelector para acceder al estado global
 import { searchDriverByName } from '../../Redux/Actions'; // Asegúrate de que la ruta sea correcta
 import './SearchBar.css';
 import Card from '../Card/Card'; 
@@ -7,25 +7,18 @@ import Card from '../Card/Card';
 const SearchBar = () => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const searchResults = useSelector(state => state.searchedDriver); // Accede al estado global para obtener los resultados de la búsqueda
 
   const handleChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
   const handleSearch = async (e) => {
-    if (e) {
-      e.preventDefault(); 
-    }
-
-    console.log('Search query:', searchQuery);
+    e.preventDefault(); // Evita que el formulario se envíe automáticamente
 
     try {
       // Realiza la búsqueda y obtén los resultados
-      const results = await dispatch(searchDriverByName(searchQuery));
-      console.log('Search results:', results);
-      // Actualiza el estado searchResults con los resultados de la búsqueda
-      setSearchResults(results);
+      await dispatch(searchDriverByName(searchQuery));
     } catch (error) {
       console.error('Error en la búsqueda:', error);
     }
@@ -33,7 +26,6 @@ const SearchBar = () => {
 
   const handleKeypress = async (event) => {
     if (event.key === 'Enter') {
-      event.preventDefault();
       handleSearch();
     }
   };
