@@ -191,7 +191,7 @@ const createDriverController = async (req, res) => {
     };
 
     // Realizar la solicitud POST para crear el conductor en la API
-    const response = await axios.post('https://pif1-production.up.railway.app/drivers/create', driverData);
+    const response = await axios.post('https://pif1-production.up.railway.app/drivers', driverData);
 
     // Devolver la respuesta de la API al cliente
     res.status(201).json(response.data);
