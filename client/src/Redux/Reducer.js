@@ -59,7 +59,6 @@ const driverReducer = (state = initialState, action) => {
         teams: teams,
         teamNames: teamNames,
         newDriver: action.payload,
-        searchedDriver: action.payload.drivers, // Asegura que los conductores buscados estén actualizados
       };
 
     case CREATE_DRIVER_SUCCESS:
