@@ -169,35 +169,23 @@ const getAllDriversFromRailwayController = async (req, res) => {
 
 const createDriverController = async (req, res) => {
   try {
-    // Verificar si req.body está definido
-    if (!req.body) {
-      return res.status(400).json({ error: "No se proporcionó ningún cuerpo de solicitud." });
-    }
-
-    // Obtener los datos del cuerpo de la solicitud
-    const { Name, LastName, Nationality, ImageURL, Birthdate, Description, Teams } = req.body;
+    // Obtener el cuerpo de la solicitud
+    const driverData = req.body;
 
     // Verificar que se proporcionaron todos los datos necesarios
-    if (!Name || !LastName || !Nationality || !ImageURL || !Birthdate || !Description || !Teams) {
-      return res.status(400).json({ error: "Todos los campos son obligatorios." });
+    const requiredFields = ['Name', 'LastName', 'Nationality', 'ImageURL', 'Birthdate', 'Description', 'Teams'];
+    const missingFields = requiredFields.filter(field => !driverData.hasOwnProperty(field));
+    if (missingFields.length > 0) {
+      return res.status(400).json({ error: "Falta(n) campo(s) obligatorio(s): " + missingFields.join(', ') });
     }
 
-    // Convertir la cadena de equipos separados por comas en un array
-    const teams = Teams.split(',').map(team => team.trim());
-
-    // Crear el objeto de datos del conductor
-    const driverData = {
-      name: Name,
-      last_name: LastName,
-      nationality: Nationality,
-      image_url: ImageURL,
-      birthdate: Birthdate,
-      description: Description,
-      teams: teams
-    };
+    // Convertir la cadena de equipos separados por comas en un array si existe
+    if (driverData.Teams) {
+      driverData.Teams = driverData.Teams.split(',').map(team => team.trim());
+    }
 
     // Realizar la solicitud POST para crear el conductor en la API
-    const response = await axios.post('https://pif1-production.up.railway.app/drivers', driverData);
+    const response = await axios.post('https://pif1-production.up.railway.app/drivers/create', driverData);
 
     // Devolver la respuesta de la API al cliente
     res.status(201).json(response.data);
