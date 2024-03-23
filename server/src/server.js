@@ -10,7 +10,7 @@ server.use(express.json());
 
 // Configuración global de CORS
 server.use(cors({
-  origin: 'https://pi-f1-j2h37j3r1-moondog11s-projects.vercel.app',
+  origin: 'https://pi-f1.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
