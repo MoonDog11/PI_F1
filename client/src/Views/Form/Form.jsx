@@ -92,7 +92,9 @@ const DriverForm = () => {
         </form>
         {showSuccessMessage && (
           <div className="popup-container">
+            <span className="close-icon" onClick={handleClosePopup}>X</span>
             <p className="popup-text">Driver created successfully!</p>
+            <button className="accept-button" onClick={handleClosePopup}>Accept</button>
           </div>
         )}
       </div>
