@@ -23,13 +23,13 @@ const DriverForm = () => {
   
     // Validaciones básicas
     if (!name || !lastName || !nationality || !birthdate || teams.length === 0) {
-      alert('Por favor, completa todos los campos obligatorios.');
+      alert('Please complete all mandatory fields.');
       return;
     }
 
     try {
       await dispatch(createDriver({ name, lastName, nationality, image, birthdate, description, teams }));
-      setSuccessMessage('Conductor creado exitosamente.');
+      setSuccessMessage('Driver created successfully.');
       // Limpiar el formulario después de enviar los datos
       setName('');
       setLastName('');
@@ -39,8 +39,8 @@ const DriverForm = () => {
       setDescription('');
       setTeams([]);
     } catch (error) {
-      console.error('Error al crear el conductor:', error);
-      alert('Error al crear el conductor. Por favor, intenta nuevamente.');
+      console.error('Error creating driver:', error);
+      alert('Error creating driver. Please try again.');
     }
   };
 
