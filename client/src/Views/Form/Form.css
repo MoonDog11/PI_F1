@@ -1,5 +1,31 @@
 /* DriverForm.css */
+/* Estilo para el contenedor del pop-up */
+.popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9); /* Fondo degradado negro */
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 999;
+  animation: glowAnimation 2s infinite; /* Animación para el brillo blanco */
+}
 
+/* Estilo para el texto del pop-up */
+.popup-text {
+  color: #fff; /* Color blanco para el texto */
+  font-size: 18px;
+  text-align: center;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff, 0 0 60px #fff, 0 0 70px #fff; /* Efecto de brillo blanco */
+}
+
+/* Animación para el brillo blanco */
+@keyframes glowAnimation {
+  0% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff; }
+  50% { text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff, 0 0 60px #fff; }
+  100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff; }
+}
 /* Estilos específicos para el formulario de conductor */
 .driver-form-container {
     max-width: 400px;
