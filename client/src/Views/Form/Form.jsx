@@ -45,6 +45,10 @@ const DriverForm = () => {
     }
   };
 
+  const handleClosePopup = () => {
+    setShowSuccessMessage(false);
+  };
+
   return (
     <div className="page-container">
       <Navbar />
