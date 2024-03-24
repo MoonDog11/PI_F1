@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createDriver } from '../../Redux/Actions';
+import { useNavigate } from 'react-router-dom';
+import fondoImage from './abstract-316425_640.jpeg';
+import Navbar from "../../Components/NavBar/NavBar";
 import './Form.css'; // Añade tu archivo CSS o estilos aquí
 
 const DriverForm = () => {
@@ -14,6 +17,7 @@ const DriverForm = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +31,7 @@ const DriverForm = () => {
     try {
       await dispatch(createDriver({ name, lastName, nationality, image, birthdate, description, teams }));
       setShowSuccessMessage(true);
-      // Clear form after submitting data
+      // Limpiar el formulario después de enviar los datos
       setName('');
       setLastName('');
       setNationality('');
@@ -43,7 +47,8 @@ const DriverForm = () => {
 
   return (
     <div className="page-container">
-      <div className="driver-form-container">
+      <Navbar />
+      <div className="driver-form-container" style={{ backgroundImage: `url(${fondoImage})` }}>
         <h2>New Driver</h2>
         <form onSubmit={handleSubmit} className="driver-form">
           <label>
