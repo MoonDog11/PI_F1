@@ -37,19 +37,35 @@
   font-size: 20px;
 }
 
+.close-icon:hover {
+  color: #fff;
+  /* Cambia el color del texto al pasar el cursor */
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #f8f2f8, 0 0 40px #ede8ee, 0 0 50px #f0eaf0, 0 0 60px #f7f3f8, 0 0 70px #faf7fa;
+  /* Efecto de resplandor */
+}
+
 .accept-button {
-  background-color: #4CAF50;
-  color: white;
+  background: linear-gradient(to top, #3f3e3e, #000);
+  /* Fondo degradado de gris a negro */
+  color: #fff;
+  /* Color del texto */
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: bold;
   margin-top: 20px;
+  transition: all 0.2s ease-in-out;
 }
 
 .accept-button:hover {
-  background-color: #45a049;
+  background: linear-gradient(to top, #3f3e3e, #000);
+  /* Mantén el fondo degradado */
+  color: #fff;
+  /* Cambia el color del texto */
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #f8f2f8, 0 0 40px #ede8ee, 0 0 50px #f0eaf0, 0 0 60px #f7f3f8, 0 0 70px #faf7fa;
+  /* Efecto de resplandor */
 }
 /* Estilos específicos para el formulario de conductor */
 .driver-form-container {
