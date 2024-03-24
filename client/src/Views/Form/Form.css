@@ -27,6 +27,30 @@
   50% { text-shadow: 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff, 0 0 50px #fff, 0 0 60px #fff; }
   100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff; }
 }
+
+.close-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 20px;
+}
+
+.accept-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.accept-button:hover {
+  background-color: #45a049;
+}
 /* Estilos específicos para el formulario de conductor */
 .driver-form-container {
     max-width: 400px;
