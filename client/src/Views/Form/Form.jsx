@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createDriver } from '../../Redux/Actions';
-import { useNavigate } from 'react-router-dom';
 import './Form.css'; // Añade tu archivo CSS o estilos aquí
-import fondoImage from './abstract-316425_640.jpeg';
-import Navbar from "../../Components/NavBar/NavBar";
 
 const DriverForm = () => {
   const [name, setName] = useState('');
@@ -14,27 +11,23 @@ const DriverForm = () => {
   const [birthdate, setBirthdate] = useState('');
   const [description, setDescription] = useState('');
   const [teams, setTeams] = useState([]);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Nuevo estado para controlar la visibilidad del mensaje
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validaciones básicas
+  
+    // Basic validations
     if (!name || !lastName || !nationality || !birthdate || teams.length === 0) {
-      alert('Por favor, completa todos los campos obligatorios.');
+      alert('Please complete all required fields.');
       return;
     }
 
     try {
       await dispatch(createDriver({ name, lastName, nationality, image, birthdate, description, teams }));
-      
-      // Mostrar el mensaje emergente
       setShowSuccessMessage(true);
-
-      // Limpiar el formulario después de enviar los datos
+      // Clear form after submitting data
       setName('');
       setLastName('');
       setNationality('');
@@ -43,33 +36,60 @@ const DriverForm = () => {
       setDescription('');
       setTeams([]);
     } catch (error) {
-      console.error('Error al crear el conductor:', error);
-      alert('Error al crear el conductor. Por favor, intenta nuevamente.');
+      console.error('Error creating driver:', error);
+      alert('Error creating driver. Please try again.');
     }
   };
 
   return (
     <div className="page-container">
-      <Navbar />
-      <div className="driver-form-container" style={{ backgroundImage: `url(${fondoImage})` }}>
+      <div className="driver-form-container">
         <h2>New Driver</h2>
         <form onSubmit={handleSubmit} className="driver-form">
-          {/* Resto del formulario */}
-
+          <label>
+            Name:
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="input-field" />
+          </label>
+          <br />
+          <label>
+            Last Name:
+            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} className="input-field" />
+          </label>
+          <br />
+          <label>
+            Nationality:
+            <input type="text" value={nationality} onChange={(e) => setNationality(e.target.value)} className="input-field" />
+          </label>
+          <br />
+          <label>
+            Image URL:
+            <input type="text" value={image} onChange={(e) => setImage(e.target.value)} className="input-field" />
+          </label>
+          <br />
+          <label>
+            Birthdate:
+            <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} className="input-field" />
+          </label>
+          <br />
+          <label>
+            Description:
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="input-field" />
+          </label>
+          <br />
+          <label>
+            Teams (separate by commas):
+            <input type="text" value={teams.join(',')} onChange={(e) => setTeams(e.target.value.split(','))} className="input-field" />
+          </label>
+          <br />
           <button className="button-create" type="submit">
             <span>Create</span>
           </button>
-
-          {/* Mostrar el mensaje emergente si showSuccessMessage es true */}
-          {showSuccessMessage && (
-            <div className="popup">
-              <div className="popup-content">
-                <span onClick={() => setShowSuccessMessage(false)} className="close-popup">&times;</span>
-                <p className="popup-text">Driver created successfully!</p>
-              </div>
-            </div>
-          )}
         </form>
+        {showSuccessMessage && (
+          <div className="popup-container">
+            <p className="popup-text">Driver created successfully!</p>
+          </div>
+        )}
       </div>
     </div>
   );
