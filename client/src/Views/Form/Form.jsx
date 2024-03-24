@@ -65,7 +65,7 @@ const DriverForm = () => {
             <div className="popup">
               <div className="popup-content">
                 <span onClick={() => setShowSuccessMessage(false)} className="close-popup">&times;</span>
-                <p>Driver created successfully!</p>
+                <p className="popup-text">Driver created successfully!</p>
               </div>
             </div>
           )}
